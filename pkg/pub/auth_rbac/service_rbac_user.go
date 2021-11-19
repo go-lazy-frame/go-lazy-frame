@@ -8,10 +8,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
-	"go-lazy-frame/pkg/pub/db"
-	"go-lazy-frame/pkg/pub/query"
-	"go-lazy-frame/pkg/pub/update"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/update"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 )
 
 // =================================================================================

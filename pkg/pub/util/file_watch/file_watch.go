@@ -25,8 +25,8 @@ package file_watch
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/toolkits/file"
-	"go-lazy-frame/pkg/pub/logger"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"io/ioutil"
 	"os"
 	"path"

@@ -25,7 +25,7 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"go-lazy-frame/pkg/pub/vo"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/vo"
 	"net/http"
 )
 

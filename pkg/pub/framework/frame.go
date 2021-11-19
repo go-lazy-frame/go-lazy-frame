@@ -23,8 +23,8 @@
 package framework
 
 import (
-	"go-lazy-frame/pkg/pub/db"
-	"go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"time"
 )
 

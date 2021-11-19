@@ -11,9 +11,9 @@ package auth_rbac
 
 import (
 	"errors"
-	"go-lazy-frame/pkg/pub/db"
-	"go-lazy-frame/pkg/pub/query"
-	"go-lazy-frame/pkg/pub/update"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/update"
 )
 
 type rbacRoleService struct {}

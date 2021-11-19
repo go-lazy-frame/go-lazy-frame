@@ -23,8 +23,8 @@
 package auth_rbac
 
 import (
-	"go-lazy-frame/configs"
-	"go-lazy-frame/pkg/pub/db"
+	"github.com/go-lazy-frame/go-lazy-frame/configs"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
 )
 
 func ModelAutoMigrate() {

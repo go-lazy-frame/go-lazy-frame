@@ -23,7 +23,7 @@
 package util
 
 import (
-	"go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"strconv"
 )
 
