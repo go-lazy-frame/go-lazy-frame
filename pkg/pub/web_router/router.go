@@ -27,14 +27,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"github.com/swaggo/swag"
-	"github.com/swaggo/swag/gen"
 	"github.com/go-lazy-frame/go-lazy-frame/configs"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/auth_rbac"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/swaggo/swag"
+	"github.com/swaggo/swag/gen"
 	"net/http"
 	"os"
 	"path"
@@ -128,7 +128,7 @@ func UpdateDocsGo(dirs []string, docsPath string, config configs.Config, swagger
 
 	if configs.GeneralConfig.EnableRbacAuth {
 		projectHome := os.Getenv("projectHome")
-		dirs = append(dirs, path.Join(projectHome, "pkg/pub/auth_rbac")+"/")
+		dirs = append(dirs, path.Join(projectHome, "vendor/github.com/go-lazy-frame/go-lazy-frame/pkg/pub/auth_rbac")+"/")
 	}
 
 	c := &gen.Config{
