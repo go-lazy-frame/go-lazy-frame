@@ -1,4 +1,4 @@
-module go-lazy-frame
+module github.com/go-lazy-frame/go-lazy-frame
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
