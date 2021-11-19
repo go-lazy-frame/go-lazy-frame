@@ -1,0 +1,48 @@
+{
+  // 代码自动生成配置
+  "gen": {
+    // 是否覆盖已有文件，true 或 false，每次更新自动生成的代码（只针对 DTO、Model、Vo 的 gen_ 开头的不可编辑文件生效。可编辑的文件都不会覆盖）
+    // 控制器，推荐 false，因为接口会不断开发，不建议覆盖
+    "fileOverrideController": false,
+    // Service，推荐 false，业务逻辑的服务处理，会不断开发，不建议覆盖
+    "fileOverrideService": false,
+    // DTO，推荐 true，表结构变更时，需要同时更新，不会覆盖对应的可编辑文件，自定义代码写在单独的代码文件
+    "fileOverrideDto": true,
+    // Model，推荐 true，表结构变更时，需要同时更新，不会覆盖对应的可编辑文件，自定义代码写在单独的代码文件
+    "fileOverrideModel": true,
+    // Vo，推荐 true，表结构变更时，需要同时更新，不会覆盖对应的可编辑文件，自定义代码写在单独的代码文件
+    "fileOverrideVo": true,
+    // 数据库驱动
+    "driverClass": "com.mysql.cj.jdbc.Driver",
+    // 数据库连接地址
+    "connectionUrl": "jdbc:mysql://127.0.0.1:3306/db_name?parseTime=True&serverTimezone=Hongkong&useUnicode=true&&characterEncoding=utf8&allowMultiQueries=true",
+    // 数据库连接用户名
+    "userName": "admin",
+    // 数据库连接密码
+    "password": "123456",
+    // 需要生成代码的表，支持 * 匹配
+    "tables": [
+      "*"
+    ],
+    // 需要忽略的表，支持 * 匹配
+    "ignoreTables": ["rbac_*"],
+    // 代码生成器的目录路径（保持默认即可，无需调整，路径分隔符统一为 /）
+    "homeDir": "go-lazy-frame/gen",
+    // router 路由定义的源码位置，为空则忽略自动注入路由（路径分隔符统一为 /）
+    "routerDefine": "go-lazy-frame/internal/sand_server_internal/router/router.go",
+    // 实体代码包路径（根据要生成代码的具体应用作相关调整即可，路径分隔符统一为 /）
+    "modelDir": "go-lazy-frame/internal/sand_server_internal/model",
+    // 服务代码包路径（根据要生成代码的具体应用作相关调整即可，路径分隔符统一为 /）
+    "serviceDir": "go-lazy-frame/internal/sand_server_internal/service",
+    // 控制器代码包路径（根据要生成代码的具体应用作相关调整即可，路径分隔符统一为 /）
+    "controllerDir": "go-lazy-frame/internal/sand_server_internal/controller",
+    // 响应值代码包路径（根据要生成代码的具体应用作相关调整即可，路径分隔符统一为 /）
+    "voDir": "go-lazy-frame/internal/sand_server_internal/vo",
+    // 请求数据定义代码包路径（根据要生成代码的具体应用作相关调整即可，路径分隔符统一为 /）
+    "dtoDir": "go-lazy-frame/internal/sand_server_internal/dto",
+    // Controller 控制器方法自定义的参数接口文档描述，如统一的 header 规范等
+    "controllerCustomerParamApiDoc": [
+      "@Param token header string true \"登陆成功后的授权 Token，后续的所有接口header，都要带上 token\""
+    ]
+  }
+}
