@@ -22,7 +22,7 @@
 
 package util
 
-import "go-lazy-frame/pkg/pub/logger"
+import "github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 
 func init() {
 	logger.Init("sand_server")

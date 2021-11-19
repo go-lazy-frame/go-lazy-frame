@@ -10,7 +10,7 @@ package auth_rbac
 // =================================================================================
 
 import (
-	"go-lazy-frame/pkg/pub/query"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
 )
 
 // RbacUserCreateDto RbacUser 创建请求 DTO

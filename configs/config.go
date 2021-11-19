@@ -24,8 +24,8 @@ package configs
 
 import (
 	"fmt"
-	"go-lazy-frame/pkg/pub/logger"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"

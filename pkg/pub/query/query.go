@@ -24,7 +24,7 @@ package query
 
 import (
 	"fmt"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"gorm.io/gorm"
 	"reflect"
 	"strings"

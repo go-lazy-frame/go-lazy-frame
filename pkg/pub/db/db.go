@@ -23,7 +23,7 @@
 package db
 
 import (
-	"go-lazy-frame/configs"
+	"github.com/go-lazy-frame/go-lazy-frame/configs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

@@ -24,7 +24,7 @@ package auth_rbac
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-lazy-frame/pkg/pub/web"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/web"
 )
 
 // AuthController 鉴权

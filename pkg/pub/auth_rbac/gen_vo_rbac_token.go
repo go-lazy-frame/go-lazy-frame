@@ -10,8 +10,8 @@ package auth_rbac
 // =================================================================================
 
 import (
-	"go-lazy-frame/pkg/pub/query"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 )
 
 type RbacTokenVo struct {

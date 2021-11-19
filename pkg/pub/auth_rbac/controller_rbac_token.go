@@ -10,8 +10,8 @@ package auth_rbac
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-lazy-frame/pkg/pub/util"
-	"go-lazy-frame/pkg/pub/web"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/web"
 )
 
 // RbacTokenController Token

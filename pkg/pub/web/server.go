@@ -26,10 +26,9 @@ import (
 	"fmt"
 	"github.com/arl/statsviz"
 	"github.com/gin-gonic/gin"
-	"go-lazy-frame/configs"
-	"go-lazy-frame/configs/sand_server"
-	"go-lazy-frame/pkg/pub/logger"
-	"go-lazy-frame/pkg/pub/util"
+	"github.com/go-lazy-frame/go-lazy-frame/configs"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"net/http"
 )
 
@@ -46,7 +45,7 @@ func StartWebServer(cross bool, router func(engine *gin.Engine)) {
 			logger.Sugar.Info("监控服务启动：", fmt.Sprintf("http://127.0.0.1%s/debug/statsviz/ , http://%s%s/debug/statsviz/",
 				configs.GeneralConfig.MonPort, util.IpUtil.GetLocalIp(), configs.GeneralConfig.MonPort,
 			))
-			err := http.ListenAndServe(sand_server.Config.MonPort, mux)
+			err := http.ListenAndServe(configs.GeneralConfig.MonPort, mux)
 			if err != nil {
 				fmt.Println("监控服务启动失败", err)
 			}

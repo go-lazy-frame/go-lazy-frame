@@ -23,7 +23,7 @@
 package file_watch
 
 import (
-	"go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"testing"
 )
 

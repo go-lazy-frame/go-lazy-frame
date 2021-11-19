@@ -3,7 +3,7 @@ package util
 import (
 	"fmt"
 	"runtime"
-	"go-lazy-frame/pkg/pub/logger"
+	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 
 	"go.uber.org/zap"
 )
