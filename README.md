@@ -23,8 +23,8 @@ export GOPROXY=https://goproxy.cn
 
   | 配置项         | 说明                                                         |
   | -------------- | ------------------------------------------------------------ |
-  | `projectHome` | 项目根目录的绝对目录路径，如果不配置，启动时无法自动更新接口文档 |
-  | `docsPath`    | 需要自动更新接口文档定义的 `go` 文件源码位置，如 `{ProjectHome}/internal/sand_server_internal/router/docs.go`，可使用 `{ProjectHome}` 代表上面配置的路径 |
+  | `projectHome` | 项目根目录的绝对目录路径，如果不配置，启动时无法自动更新接口文档，例如 `/home/user/go-project/my-app` |
+  | `docsPath`    | 需要自动更新接口文档定义的 `go` 文件源码位置，例如 `{ProjectHome}/internal/router/docs.go`，可使用 `{ProjectHome}` 代表上面配置的路径 |
   | `RUN_ENV`  | 有三个值：prod、dev、local，分别代表线上环境、开发环境、本地环境。本地环境代表本地开发时的环境，dev 和 prod 代表不同的运行环境（二进制运行） |
   | `ENV_Xxx` | 启动时，动态根据环境变量 `ENV_Xxx`（`Xxx` 为对应的具体配置名），更新配置，如 `ENV_EnableMon=true`，则代表系统配置`EnableMon`在运行时应用为 `true` |
 
