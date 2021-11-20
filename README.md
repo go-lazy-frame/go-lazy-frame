@@ -1,6 +1,10 @@
 # GoLazyFrame 懒人框架
 
-> 偷懒，是程序员的最高境界
+> 偷懒，是程序员的基本守则
+>
+> - 仓库地址：
+>   - github：[https://github.com/go-lazy-frame/go-lazy-frame.git](https://github.com/go-lazy-frame/go-lazy-frame.git)
+>   - gitee：[https://gitee.com/go-lazy-frame/gol-lazy-frame.git](https://gitee.com/go-lazy-frame/gol-lazy-frame.git)
 
 [TOC]
 
@@ -60,17 +64,16 @@ export GOPROXY=https://goproxy.cn
 
 ## 代码生成（重要）
 
-介于 Golang 的语言特点，Golang 的框架，提高自动化的开发效率，都是通过代码生成的途径，毕竟，Golang 语言的反射机制…..（此处就不吐槽了）
+介于 Golang 的语言特点，Golang 的框架，提高自动化的开发效率，都是通过代码生成的途径，毕竟，Golang 语言的反射机制…..（此处就不吐槽了）。代码自动生成使用：
 
-### model
-
-### controller
-
-### service
-
-### dto
-
-### vo
+```shell
+# 1. cd 进入到应用项目的同级目录，比如应用目录为 $GOPATH/src/my-app，则 cd 到 $GOPATH/src
+# 2. 拉取代码生成系统，若 github 速度慢，也可从 gitee 仓库拉取：
+git clone https://github.com/go-lazy-frame/go-lazy-frame-generate.git
+# git clone https://gitee.com/go-lazy-frame/go-lazy-frame-generate.git
+cd go-lazy-frame-generate
+# 3. 查看 README.md 说明
+```
 
 
 
