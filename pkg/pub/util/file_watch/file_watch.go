@@ -44,10 +44,15 @@ type FileWatch struct {
 	chNewFile chan string
 	// 监听器
 	watcher   *fsnotify.Watcher
+	// 判断新文件是否写完的时间更新阈值，默认 500（根据网络环境，自行调整），单位毫秒
+	WriteTime int64
 }
 
 // StartFileWatch 开始目录监听
 func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watchDirs ...string) {
+	if receiver.WriteTime == 0 {
+		receiver.WriteTime = 500
+	}
 	receiver.filesRecordCache = new(sync.Map)
 	receiver.chNewFile = make(chan string, runtime.NumCPU()*2)
 	go func() {
@@ -70,7 +75,7 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 			for {
 				select {
 				case event, ok := <-receiver.watcher.Events:
- 					if !ok {
+					if !ok {
 						logger.Sugar.Error("获取目录监听事件通道失败")
 						time.Sleep(time.Second)
 						continue
@@ -90,11 +95,11 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 							receiver.filesRecordCache.Store(event.Name, util.TimeUtil.GetMilliTime(time.Now()))
 							logger.Sugar.Debugf("发现新文件：%s，正在等待其写入完成...\n", event.Name)
 							go func() {
-								for{
+								for {
 									if t, ok := receiver.filesRecordCache.Load(event.Name); ok {
 										// 若一段时间后，文件没有任何写操作，则认为该文件已传输完毕
 										sub := util.TimeUtil.GetMilliTime(time.Now()) - t.(int64)
-										if sub >= 2000 {
+										if sub >= receiver.WriteTime {
 											receiver.filesRecordCache.Delete(event.Name)
 											receiver.chNewFile <- event.Name
 											break

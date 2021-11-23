@@ -32,7 +32,7 @@ func init() {
 }
 
 func TestFileWatch(t *testing.T) {
-	watch := FileWatch{}
+	watch := FileWatch{WriteTime: 1000}
 	watch.StartFileWatch(func(newFile string) {
 		logger.Sugar.Info("新文件：", newFile)
 	}, "/Volumes/E-NTFS/test")
