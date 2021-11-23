@@ -24,9 +24,9 @@ package file_watch
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/toolkits/file"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
+	"github.com/toolkits/file"
 	"io/ioutil"
 	"os"
 	"path"
@@ -92,9 +92,9 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 							go func() {
 								for{
 									if t, ok := receiver.filesRecordCache.Load(event.Name); ok {
-										// 若500毫秒后，文件没有任何写操作，则认为该文件已传输完毕
+										// 若一段时间后，文件没有任何写操作，则认为该文件已传输完毕
 										sub := util.TimeUtil.GetMilliTime(time.Now()) - t.(int64)
-										if sub >= 500 {
+										if sub >= 2000 {
 											receiver.filesRecordCache.Delete(event.Name)
 											receiver.chNewFile <- event.Name
 											break
