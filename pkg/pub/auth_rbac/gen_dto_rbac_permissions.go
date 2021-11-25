@@ -31,10 +31,15 @@ func (RbacPermissionsCreateDto) TableName() string {
 
 // TransformTo 从 RbacPermissionsCreateDto 转换为 实体
 func (me RbacPermissionsCreateDto) TransformTo() *RbacPermissions {
-	model := &RbacPermissions{
-		Model: gorm.Model{ID: *me.Id},
-		Description: *me.Description,
-		Permission: *me.Permission,
+	model := &RbacPermissions{}
+	if me.Id != nil {
+		model.Model = gorm.Model{ID: *me.Id}
+	}
+	if me.Description != nil {
+		model.Description = *me.Description
+	}
+	if me.Permission != nil {
+		model.Permission = *me.Permission
 	}
 	return model
 }

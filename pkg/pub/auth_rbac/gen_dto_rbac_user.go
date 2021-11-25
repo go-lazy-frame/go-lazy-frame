@@ -43,16 +43,33 @@ func (RbacUserCreateDto) TableName() string {
 
 // TransformTo 从 RbacUserCreateDto 转换为 实体
 func (me RbacUserCreateDto) TransformTo() *RbacUser {
-	model := &RbacUser{
-		Model: gorm.Model{ID: *me.Id},
-		Admin: *me.Admin,
-		LoginName: *me.LoginName,
-		LoginPswd: *me.LoginPswd,
-		Nickname: *me.Nickname,
-		Phone: *me.Phone,
-		Salt: *me.Salt,
-		Status: *me.Status,
-		SuperAdmin: *me.SuperAdmin,
+	model := &RbacUser{}
+	if me.Id != nil {
+		model.Model = gorm.Model{ID: *me.Id}
+	}
+	if me.Admin != nil {
+		model.Admin = *me.Admin
+	}
+	if me.LoginName != nil {
+		model.LoginName = *me.LoginName
+	}
+	if me.LoginPswd != nil {
+		model.LoginPswd = *me.LoginPswd
+	}
+	if me.Nickname != nil {
+		model.Nickname = *me.Nickname
+	}
+	if me.Phone != nil {
+		model.Phone = *me.Phone
+	}
+	if me.Salt != nil {
+		model.Salt = *me.Salt
+	}
+	if me.Status != nil {
+		model.Status = *me.Status
+	}
+	if me.SuperAdmin != nil {
+		model.SuperAdmin = *me.SuperAdmin
 	}
 	return model
 }

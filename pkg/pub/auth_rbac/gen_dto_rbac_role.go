@@ -33,11 +33,18 @@ func (RbacRoleCreateDto) TableName() string {
 
 // TransformTo 从 RbacRoleCreateDto 转换为 实体
 func (me RbacRoleCreateDto) TransformTo() *RbacRole {
-	model := &RbacRole{
-		Model: gorm.Model{ID: *me.Id},
-		RoleDesc: *me.RoleDesc,
-		RoleName: *me.RoleName,
-		Valid: *me.Valid,
+	model := &RbacRole{}
+	if me.Id != nil {
+		model.Model = gorm.Model{ID: *me.Id}
+	}
+	if me.RoleDesc != nil {
+		model.RoleDesc = *me.RoleDesc
+	}
+	if me.RoleName != nil {
+		model.RoleName = *me.RoleName
+	}
+	if me.Valid != nil {
+		model.Valid = *me.Valid
 	}
 	return model
 }

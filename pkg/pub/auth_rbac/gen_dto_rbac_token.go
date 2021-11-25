@@ -31,10 +31,15 @@ func (RbacTokenCreateDto) TableName() string {
 
 // TransformTo 从 RbacTokenCreateDto 转换为 实体
 func (me RbacTokenCreateDto) TransformTo() *RbacToken {
-	model := &RbacToken{
-		Model: gorm.Model{ID: *me.Id},
-		Token: *me.Token,
-		UserId: *me.UserId,
+	model := &RbacToken{}
+	if me.Id != nil {
+		model.Model = gorm.Model{ID: *me.Id}
+	}
+	if me.Token != nil {
+		model.Token = *me.Token
+	}
+	if me.UserId != nil {
+		model.UserId = *me.UserId
 	}
 	return model
 }

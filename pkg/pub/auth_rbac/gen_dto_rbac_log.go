@@ -39,14 +39,27 @@ func (RbacLogCreateDto) TableName() string {
 
 // TransformTo 从 RbacLogCreateDto 转换为 实体
 func (me RbacLogCreateDto) TransformTo() *RbacLog {
-	model := &RbacLog{
-		Model: gorm.Model{ID: *me.Id},
-		Body: *me.Body,
-		Ip: *me.Ip,
-		LoginName: *me.LoginName,
-		Status: *me.Status,
-		Url: *me.Url,
-		UrlParams: *me.UrlParams,
+	model := &RbacLog{}
+	if me.Id != nil {
+		model.Model = gorm.Model{ID: *me.Id}
+	}
+	if me.Body != nil {
+		model.Body = *me.Body
+	}
+	if me.Ip != nil {
+		model.Ip = *me.Ip
+	}
+	if me.LoginName != nil {
+		model.LoginName = *me.LoginName
+	}
+	if me.Status != nil {
+		model.Status = *me.Status
+	}
+	if me.Url != nil {
+		model.Url = *me.Url
+	}
+	if me.UrlParams != nil {
+		model.UrlParams = *me.UrlParams
 	}
 	return model
 }
