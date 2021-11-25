@@ -11,6 +11,7 @@ package auth_rbac
 
 import (
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"gorm.io/gorm"
 )
 
 // RbacRoleCreateDto RbacRole 创建请求 DTO
@@ -28,6 +29,17 @@ type RbacRoleCreateDto struct {
 // TableName 指定创建体表名
 func (RbacRoleCreateDto) TableName() string {
 	return "rbac_role"
+}
+
+// TransformTo 从 RbacRoleCreateDto 转换为 实体
+func (me RbacRoleCreateDto) TransformTo() *RbacRole {
+	model := &RbacRole{
+		Model: gorm.Model{ID: *me.Id},
+		RoleDesc: *me.RoleDesc,
+		RoleName: *me.RoleName,
+		Valid: *me.Valid,
+	}
+	return model
 }
 
 // RbacRoleQueryDto 查询请求 DTO

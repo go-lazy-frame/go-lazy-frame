@@ -11,6 +11,7 @@ package auth_rbac
 
 import (
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"gorm.io/gorm"
 )
 
 // RbacPermissionsCreateDto RbacPermissions 创建请求 DTO
@@ -26,6 +27,16 @@ type RbacPermissionsCreateDto struct {
 // TableName 指定创建体表名
 func (RbacPermissionsCreateDto) TableName() string {
 	return "rbac_permissions"
+}
+
+// TransformTo 从 RbacPermissionsCreateDto 转换为 实体
+func (me RbacPermissionsCreateDto) TransformTo() *RbacPermissions {
+	model := &RbacPermissions{
+		Model: gorm.Model{ID: *me.Id},
+		Description: *me.Description,
+		Permission: *me.Permission,
+	}
+	return model
 }
 
 // RbacPermissionsQueryDto 查询请求 DTO

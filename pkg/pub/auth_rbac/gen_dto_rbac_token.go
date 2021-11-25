@@ -11,6 +11,7 @@ package auth_rbac
 
 import (
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
+	"gorm.io/gorm"
 )
 
 // RbacTokenCreateDto RbacToken 创建请求 DTO
@@ -26,6 +27,16 @@ type RbacTokenCreateDto struct {
 // TableName 指定创建体表名
 func (RbacTokenCreateDto) TableName() string {
 	return "rbac_token"
+}
+
+// TransformTo 从 RbacTokenCreateDto 转换为 实体
+func (me RbacTokenCreateDto) TransformTo() *RbacToken {
+	model := &RbacToken{
+		Model: gorm.Model{ID: *me.Id},
+		Token: *me.Token,
+		UserId: *me.UserId,
+	}
+	return model
 }
 
 // RbacTokenQueryDto 查询请求 DTO

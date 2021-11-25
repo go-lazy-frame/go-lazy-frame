@@ -23,12 +23,12 @@ var (
 )
 
 // CreateRbacPermissions 创建
-func (*rbacPermissionsService) CreateRbacPermissions(d RbacPermissionsCreateDto) (*RbacPermissionsCreateDto, error) {
+func (*rbacPermissionsService) CreateRbacPermissions(d RbacPermissionsCreateDto) (*RbacPermissions, error) {
 	err := db.DB.Create(&d).Error
 	if err != nil {
 		return nil, errors.New("create failed：" + err.Error())
 	}
-	return &d, nil
+	return d.TransformTo(), nil
 }
 
 // UpdateRbacPermissions 更新

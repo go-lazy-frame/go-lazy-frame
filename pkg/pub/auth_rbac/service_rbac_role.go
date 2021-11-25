@@ -23,12 +23,12 @@ var (
 )
 
 // CreateRbacRole 创建
-func (*rbacRoleService) CreateRbacRole(d RbacRoleCreateDto) (*RbacRoleCreateDto, error) {
+func (*rbacRoleService) CreateRbacRole(d RbacRoleCreateDto) (*RbacRole, error) {
 	err := db.DB.Create(&d).Error
 	if err != nil {
 		return nil, errors.New("create failed：" + err.Error())
 	}
-	return &d, nil
+	return d.TransformTo(), nil
 }
 
 // UpdateRbacRole 更新

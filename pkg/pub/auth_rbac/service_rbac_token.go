@@ -25,12 +25,12 @@ var (
 )
 
 // CreateRbacToken 创建
-func (*rbacTokenService) CreateRbacToken(d RbacTokenCreateDto) (*RbacTokenCreateDto, error) {
+func (*rbacTokenService) CreateRbacToken(d RbacTokenCreateDto) (*RbacToken, error) {
 	err := db.DB.Create(&d).Error
 	if err != nil {
 		return nil, errors.New("create failed：" + err.Error())
 	}
-	return &d, nil
+	return d.TransformTo(), nil
 }
 
 // UpdateRbacToken 更新
@@ -200,7 +200,7 @@ func (s *rbacTokenService) GetToken(user *RbacUser) (string, error) {
 		return "", err
 	}
 
-	return *token.Token ,nil
+	return token.Token ,nil
 }
 
 // IsValid 判断 token 是否可用
