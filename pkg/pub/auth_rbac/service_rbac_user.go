@@ -1,6 +1,6 @@
 /**
 * @author long.qian
-*/
+ */
 
 package auth_rbac
 
@@ -19,7 +19,7 @@ import (
 // eg: func (*rbacUserService) FuncName(d dto.XxxDto) error {}
 // =================================================================================
 
-type rbacUserService struct {}
+type rbacUserService struct{}
 
 var (
 	RbacUserService = new(rbacUserService)
@@ -102,9 +102,9 @@ func (*rbacUserService) QueryPageRbacUser(d RbacUserPageDto) (*RbacUserPageVo, e
 
 	return &RbacUserPageVo{
 		Page: query.Page{
-			PageNum: d.PageNum,
+			PageNum:  d.PageNum,
 			PageSize: d.PageSize,
-			Total: total,
+			Total:    total,
 		},
 		Result: voList,
 	}, nil
@@ -232,4 +232,39 @@ func (me *rbacUserService) GetPermissions(user RbacUser) ([]RbacPermissionsVo, e
 	}
 
 	return permissions, nil
+}
+
+func (me *rbacUserService) SelfModifyProfile(token string, dto SelfModifyProfileDto) error {
+	user, err := me.FindRbacUserByToken(token)
+	if err != nil {
+		return err
+	}
+	return me.UpdateRbacUser(RbacUserUpdateDto{
+		Id:       user.ID,
+		Phone:    dto.Phone,
+		Nickname: dto.Nickname,
+	})
+}
+
+func (me *rbacUserService) SelfModifyPassword(token string, dto SelfModifyPasswordDto) error {
+	user, err := me.FindRbacUserByToken(token)
+	if err != nil {
+		return err
+	}
+	if dto.OldPassword == "" {
+		return errors.New("旧密码不能为空")
+	}
+	if dto.Password == "" {
+		return errors.New("新密码不能为空")
+	}
+	if dto.Password != dto.RepeatPassword {
+		return errors.New("密码不匹配")
+	}
+	if me.GeneratePswd(dto.OldPassword, user.Salt) != user.LoginPswd {
+		return errors.New("当前用户密码错误")
+	}
+	return me.UpdateRbacUser(RbacUserUpdateDto{
+		Id: user.ID,
+		LoginPswd: me.GeneratePswd(dto.Password, user.Salt),
+	})
 }

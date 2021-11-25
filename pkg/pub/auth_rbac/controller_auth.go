@@ -33,8 +33,10 @@ import (
 // 提示：接口变动或接口参数变动，需要执行对应 xxx 脚本进行接口文档的同步更新
 type AuthController struct {
 	web.CommonController
-	WebLogin  interface{} `url:"/login" method:"post"`
-	WebLogout interface{} `url:"/logout" method:"post"`
+	WebLogin              interface{} `url:"/login" method:"post"`
+	WebLogout             interface{} `url:"/logout" method:"post"`
+	WebSelfModifyProfile  interface{} `url:"/self_modify_profile" method:"post"`
+	WebSelfModifyPassword interface{} `url:"/self_modify_password" method:"post"`
 }
 
 // Login
@@ -106,6 +108,64 @@ func (me AuthController) Login(c *gin.Context) {
 func (me AuthController) Logout(c *gin.Context) {
 	token := c.GetHeader("token")
 	err := RbacTokenService.Logout(token)
+	if err != nil {
+		me.Failed(c, err.Error())
+		return
+	}
+	me.Success(c, "Success")
+}
+
+// SelfModifyProfile
+// 注意：以下的 id 必须设置，且必须全局唯一，否则接口文档页面无法正常显示
+// @id AuthSelfModifyProfileUsingPOST
+// @Tags 登陆用户
+// @Summary 资料修改
+// @Description 资料修改
+// @Accept json
+// @Produce  json
+// @Param token header string true "登陆成功后的授权 Token，后续的所有接口header，都要带上 token"
+// @Param request body SelfModifyProfileDto{} true "资料修改"
+// 		参数名 参数类型 参数对象类型 是否必传 描述
+// @Success 200 {object} vo.ResponseResult{}
+// @Failure 500 {object} vo.ResponseResult{}
+// @Router /self_modify_profile [post]
+func (me AuthController) SelfModifyProfile(c *gin.Context) {
+	token := c.GetHeader("token")
+	d := SelfModifyProfileDto{}
+	if err := me.BindBodyJson(c, &d); err != nil {
+		me.Failed(c, err.Error())
+		return
+	}
+	err := RbacUserService.SelfModifyProfile(token, d)
+	if err != nil {
+		me.Failed(c, err.Error())
+		return
+	}
+	me.Success(c, "Success")
+}
+
+// SelfModifyPassword
+// 注意：以下的 id 必须设置，且必须全局唯一，否则接口文档页面无法正常显示
+// @id AuthSelfModifyPasswordUsingPOST
+// @Tags 登陆用户
+// @Summary 密码修改
+// @Description 密码修改
+// @Accept json
+// @Produce  json
+// @Param token header string true "登陆成功后的授权 Token，后续的所有接口header，都要带上 token"
+// @Param request body SelfModifyPasswordDto{} true "资料修改"
+// 		参数名 参数类型 参数对象类型 是否必传 描述
+// @Success 200 {object} vo.ResponseResult{}
+// @Failure 500 {object} vo.ResponseResult{}
+// @Router /self_modify_password [post]
+func (me AuthController) SelfModifyPassword(c *gin.Context) {
+	token := c.GetHeader("token")
+	d := SelfModifyPasswordDto{}
+	if err := me.BindBodyJson(c, &d); err != nil {
+		me.Failed(c, err.Error())
+		return
+	}
+	err := RbacUserService.SelfModifyPassword(token, d)
 	if err != nil {
 		me.Failed(c, err.Error())
 		return

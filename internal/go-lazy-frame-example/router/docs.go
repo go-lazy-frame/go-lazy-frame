@@ -1477,6 +1477,102 @@ var SwaggerDoc = `{
                     }
                 }
             }
+        },
+        "/self_modify_password": {
+            "post": {
+                "description": "密码修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登陆用户"
+                ],
+                "summary": "密码修改",
+                "operationId": "AuthSelfModifyPasswordUsingPOST",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登陆成功后的授权 Token，后续的所有接口header，都要带上 token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "资料修改",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_rbac.SelfModifyPasswordDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/self_modify_profile": {
+            "post": {
+                "description": "资料修改",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "登陆用户"
+                ],
+                "summary": "资料修改",
+                "operationId": "AuthSelfModifyProfileUsingPOST",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登陆成功后的授权 Token，后续的所有接口header，都要带上 token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "资料修改",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth_rbac.SelfModifyProfileDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2924,6 +3020,31 @@ var SwaggerDoc = `{
                 },
                 "superAdmin": {
                     "description": "是否超级管理员"
+                }
+            }
+        },
+        "auth_rbac.SelfModifyPasswordDto": {
+            "type": "object",
+            "properties": {
+                "old_password": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "repeat_password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth_rbac.SelfModifyProfileDto": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },

@@ -24,6 +24,17 @@ package auth_rbac
 
 // LoginDto 登陆
 type LoginDto struct {
-	LoginName string `json:"loginName"` // 登录名
+	LoginName string `json:"loginName"`     // 登录名
 	LoginPswd string `json:"loginPassword"` // 登陆密码
+}
+
+type SelfModifyProfileDto struct {
+	Phone    string `json:"phone"`
+	Nickname string `json:"nickname"`
+}
+
+type SelfModifyPasswordDto struct {
+	OldPassword    string `json:"old_password"`
+	Password       string `json:"password"`
+	RepeatPassword string `json:"repeat_password"`
 }
