@@ -15,23 +15,23 @@ import (
 
 // RbacTokenCreateDto RbacToken 创建请求 DTO
 type RbacTokenCreateDto struct {
+	// Id
+    Id *uint `json:"id"`
 	// Token
-    Token string `json:"token" binding:"required"`
+    Token *string `json:"token" binding:"required"`
 	// 用户ID
-    UserId uint `json:"userId" binding:"required"`
+    UserId *uint `json:"userId" binding:"required"`
 }
 
-// TransformTo 从 RbacTokenCreateDto 转换为 实体
-func (me RbacTokenCreateDto) TransformTo() *RbacToken {
-	model := &RbacToken{
-		Token: me.Token,
-		UserId: me.UserId,
-	}
-	return model
+// TableName 指定创建体表名
+func (RbacTokenCreateDto) TableName() string {
+	return "rbac_token"
 }
 
 // RbacTokenQueryDto 查询请求 DTO
 type RbacTokenQueryDto struct {
+	// 【created_at】CreatedAt 时间范围（包含边界）
+	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
 	// 【id】Id 全匹配
 	Id interface{} `json:"id" field:"id"  type:"equal"`
 	// 【id】Id in 查询
@@ -46,10 +46,6 @@ type RbacTokenQueryDto struct {
 	IdLt interface{} `json:"idLt" field:"id"  type:"lt"`
 	// 【id】Id 小于等于
 	IdLte interface{} `json:"idLte" field:"id"  type:"lte"`
-	// 【created_at】CreatedAt 时间范围（包含边界）
-	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
-	// 【updated_at】UpdatedAt 时间范围（包含边界）
-	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
 	// 【token】Token 全匹配
 	Token interface{} `json:"token" field:"token"  type:"equal"`
 	// 【token】Token in 查询
@@ -60,6 +56,8 @@ type RbacTokenQueryDto struct {
 	TokenRight interface{} `json:"tokenRight" field:"token"  type:"likeLeft"`
 	// 【token】Token 模糊匹配(%xxx%，查询有性能影响)
 	TokenMiddle interface{} `json:"tokenMiddle" field:"token"  type:"likeMiddle"`
+	// 【updated_at】UpdatedAt 时间范围（包含边界）
+	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
 	// 【user_id】用户ID 全匹配
 	UserId interface{} `json:"userId" field:"user_id"  type:"equal"`
 	// 【user_id】用户ID in 查询

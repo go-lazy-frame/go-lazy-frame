@@ -23,13 +23,12 @@ var (
 )
 
 // CreateRbacLog 创建
-func (*rbacLogService) CreateRbacLog(d RbacLogCreateDto) (*RbacLog, error) {
-	c := d.TransformTo()
-	err := db.DB.Create(c).Error
+func (*rbacLogService) CreateRbacLog(d RbacLogCreateDto) (*RbacLogCreateDto, error) {
+	err := db.DB.Create(&d).Error
 	if err != nil {
 		return nil, errors.New("create failed：" + err.Error())
 	}
-	return c, nil
+	return &d, nil
 }
 
 // UpdateRbacLog 更新

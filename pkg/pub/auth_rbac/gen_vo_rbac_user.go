@@ -15,61 +15,63 @@ import (
 )
 
 type RbacUserVo struct {
-	// Id
-    Id uint `json:"id"`
-	// CreatedAt
-    CreatedAt string `json:"createdAt"`
-	// UpdatedAt
-    UpdatedAt string `json:"updatedAt"`
-	// 是否超级管理员
-    SuperAdmin bool `json:"superAdmin"`
 	// 是否管理员
     Admin bool `json:"admin"`
-	// 昵称
-    Nickname string `json:"nickname"`
-	// 手机号
-    Phone string `json:"phone"`
+	// CreatedAt
+    CreatedAt string `json:"createdAt"`
+	// DeletedAt
+    DeletedAt string `json:"deletedAt"`
+	// Id
+    Id uint `json:"id"`
 	// 登录名
     LoginName string `json:"loginName"`
 	// 登陆密码
     LoginPswd string `json:"loginPswd"`
+	// 昵称
+    Nickname string `json:"nickname"`
+	// 手机号
+    Phone string `json:"phone"`
 	// 密码加盐
     Salt string `json:"salt"`
 	// 状态 1:账号正常 0:账号禁用 -1:账号违规
     Status int64 `json:"status"`
+	// 是否超级管理员
+    SuperAdmin bool `json:"superAdmin"`
+	// UpdatedAt
+    UpdatedAt string `json:"updatedAt"`
 }
 
 // Transform 从实体 RbacUser 转换为 Vo
 func (RbacUserVo) Transform(m RbacUser) RbacUserVo {
 	vo := RbacUserVo{}
-	vo.Id = m.ID
-	vo.CreatedAt = util.TimeUtil.GetTimeFormatByFormat(m.CreatedAt, util.GolangBirthTime)
-	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
-	vo.SuperAdmin = m.SuperAdmin
 	vo.Admin = m.Admin
-	vo.Nickname = m.Nickname
-	vo.Phone = m.Phone
+	vo.CreatedAt = util.TimeUtil.GetTimeFormatByFormat(m.CreatedAt, util.GolangBirthTime)
+	vo.Id = m.ID
 	vo.LoginName = m.LoginName
 	vo.LoginPswd = m.LoginPswd
+	vo.Nickname = m.Nickname
+	vo.Phone = m.Phone
 	vo.Salt = m.Salt
 	vo.Status = m.Status
+	vo.SuperAdmin = m.SuperAdmin
+	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
 	return vo
 }
 
 // TransformTo 从 RbacUserVo 转换为 实体
 func (me RbacUserVo) TransformTo() RbacUser {
 	model := RbacUser{}
-	model.ID = me.Id
-	model.CreatedAt = *util.TimeUtil.TimeParseByFormat(me.CreatedAt, util.GolangBirthTime)
-	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
-	model.SuperAdmin = me.SuperAdmin
 	model.Admin = me.Admin
-	model.Nickname = me.Nickname
-	model.Phone = me.Phone
+	model.CreatedAt = *util.TimeUtil.TimeParseByFormat(me.CreatedAt, util.GolangBirthTime)
+	model.ID = me.Id
 	model.LoginName = me.LoginName
 	model.LoginPswd = me.LoginPswd
+	model.Nickname = me.Nickname
+	model.Phone = me.Phone
 	model.Salt = me.Salt
 	model.Status = me.Status
+	model.SuperAdmin = me.SuperAdmin
+	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
 	return model
 }
 

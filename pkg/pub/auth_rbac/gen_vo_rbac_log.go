@@ -15,53 +15,55 @@ import (
 )
 
 type RbacLogVo struct {
-	// Id
-    Id uint `json:"id"`
-	// CreatedAt
-    CreatedAt string `json:"createdAt"`
-	// UpdatedAt
-    UpdatedAt string `json:"updatedAt"`
 	// 请求Body体参数
     Body string `json:"body"`
+	// CreatedAt
+    CreatedAt string `json:"createdAt"`
+	// DeletedAt
+    DeletedAt string `json:"deletedAt"`
+	// Id
+    Id uint `json:"id"`
 	// IP地址
     Ip string `json:"ip"`
-	// 访问地址
-    Url string `json:"url"`
-	// 地址参数
-    UrlParams string `json:"urlParams"`
 	// 登陆用户
     LoginName string `json:"loginName"`
 	// 状态 0：正常 1：鉴权失败
     Status int64 `json:"status"`
+	// UpdatedAt
+    UpdatedAt string `json:"updatedAt"`
+	// 访问地址
+    Url string `json:"url"`
+	// 地址参数
+    UrlParams string `json:"urlParams"`
 }
 
 // Transform 从实体 RbacLog 转换为 Vo
 func (RbacLogVo) Transform(m RbacLog) RbacLogVo {
 	vo := RbacLogVo{}
-	vo.Id = m.ID
-	vo.CreatedAt = util.TimeUtil.GetTimeFormatByFormat(m.CreatedAt, util.GolangBirthTime)
-	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
 	vo.Body = m.Body
+	vo.CreatedAt = util.TimeUtil.GetTimeFormatByFormat(m.CreatedAt, util.GolangBirthTime)
+	vo.Id = m.ID
 	vo.Ip = m.Ip
-	vo.Url = m.Url
-	vo.UrlParams = m.UrlParams
 	vo.LoginName = m.LoginName
 	vo.Status = m.Status
+	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
+	vo.Url = m.Url
+	vo.UrlParams = m.UrlParams
 	return vo
 }
 
 // TransformTo 从 RbacLogVo 转换为 实体
 func (me RbacLogVo) TransformTo() RbacLog {
 	model := RbacLog{}
-	model.ID = me.Id
-	model.CreatedAt = *util.TimeUtil.TimeParseByFormat(me.CreatedAt, util.GolangBirthTime)
-	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
 	model.Body = me.Body
+	model.CreatedAt = *util.TimeUtil.TimeParseByFormat(me.CreatedAt, util.GolangBirthTime)
+	model.ID = me.Id
 	model.Ip = me.Ip
-	model.Url = me.Url
-	model.UrlParams = me.UrlParams
 	model.LoginName = me.LoginName
 	model.Status = me.Status
+	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
+	model.Url = me.Url
+	model.UrlParams = me.UrlParams
 	return model
 }
 

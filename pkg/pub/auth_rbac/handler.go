@@ -46,16 +46,18 @@ var (
 // RbacHandler 拦截器
 func RbacHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		num := int64(0)
 		rbacLog := RbacLogCreateDto{
-			Ip:        c.Request.RemoteAddr,
-			Url:       c.Request.URL.Path,
-			UrlParams: c.Request.URL.RawQuery,
-			Status:    0,
+			Ip:        &c.Request.RemoteAddr,
+			Url:       &c.Request.URL.Path,
+			UrlParams: &c.Request.URL.RawQuery,
+			Status:    &num,
 		}
 		body := make(map[string]interface{})
 		err := c.ShouldBindBodyWith(&body, binding.JSON)
 		if err == nil {
-			rbacLog.Body = util.JsonUtil.ParseObjToJsonString(body)
+			s := util.JsonUtil.ParseObjToJsonString(body)
+			rbacLog.Body = &s
 		}
 		defer func() {
 			// 保存操作记录
@@ -89,7 +91,8 @@ func RbacHandler() gin.HandlerFunc {
 				Data:    nil,
 			})
 			c.Abort()
-			rbacLog.Status = 1
+			status := int64(1)
+			rbacLog.Status = &status
 			return
 		}
 		user, err := RbacUserService.FindRbacUserByToken(token)
@@ -100,10 +103,11 @@ func RbacHandler() gin.HandlerFunc {
 				Data:    nil,
 			})
 			c.Abort()
-			rbacLog.Status = 1
+			status := int64(1)
+			rbacLog.Status = &status
 			return
 		}
-		rbacLog.LoginName = user.LoginName
+		rbacLog.LoginName = &user.LoginName
 		if user.Status != 1 {
 			c.JSON(http.StatusOK, vo.ResponseResult{
 				Code:    "403",
@@ -111,7 +115,8 @@ func RbacHandler() gin.HandlerFunc {
 				Data:    nil,
 			})
 			c.Abort()
-			rbacLog.Status = 1
+			status := int64(1)
+			rbacLog.Status = &status
 			return
 		}
 

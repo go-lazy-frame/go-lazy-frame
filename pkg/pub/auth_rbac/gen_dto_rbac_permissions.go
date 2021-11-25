@@ -16,22 +16,32 @@ import (
 // RbacPermissionsCreateDto RbacPermissions 创建请求 DTO
 type RbacPermissionsCreateDto struct {
 	// 权限描述
-    Description string `json:"description" binding:"required"`
+    Description *string `json:"description" binding:"required"`
+	// Id
+    Id *uint `json:"id"`
 	// 权限值
-    Permission string `json:"permission" binding:"required"`
+    Permission *string `json:"permission" binding:"required"`
 }
 
-// TransformTo 从 RbacPermissionsCreateDto 转换为 实体
-func (me RbacPermissionsCreateDto) TransformTo() *RbacPermissions {
-	model := &RbacPermissions{
-		Description: me.Description,
-		Permission: me.Permission,
-	}
-	return model
+// TableName 指定创建体表名
+func (RbacPermissionsCreateDto) TableName() string {
+	return "rbac_permissions"
 }
 
 // RbacPermissionsQueryDto 查询请求 DTO
 type RbacPermissionsQueryDto struct {
+	// 【created_at】CreatedAt 时间范围（包含边界）
+	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
+	// 【description】权限描述 全匹配
+	Description interface{} `json:"description" field:"description"  type:"equal"`
+	// 【description】权限描述 in 查询
+	DescriptionIn []interface{} `json:"descriptionIn" field:"description"  type:"in"`
+	// 【description】权限描述 左匹配(xxx%)
+	DescriptionLeft interface{} `json:"descriptionLeft" field:"description"  type:"likeRight"`
+	// 【description】权限描述 右匹配(%xxx，查询有性能影响)
+	DescriptionRight interface{} `json:"descriptionRight" field:"description"  type:"likeLeft"`
+	// 【description】权限描述 模糊匹配(%xxx%，查询有性能影响)
+	DescriptionMiddle interface{} `json:"descriptionMiddle" field:"description"  type:"likeMiddle"`
 	// 【id】Id 全匹配
 	Id interface{} `json:"id" field:"id"  type:"equal"`
 	// 【id】Id in 查询
@@ -46,20 +56,6 @@ type RbacPermissionsQueryDto struct {
 	IdLt interface{} `json:"idLt" field:"id"  type:"lt"`
 	// 【id】Id 小于等于
 	IdLte interface{} `json:"idLte" field:"id"  type:"lte"`
-	// 【created_at】CreatedAt 时间范围（包含边界）
-	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
-	// 【updated_at】UpdatedAt 时间范围（包含边界）
-	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
-	// 【description】权限描述 全匹配
-	Description interface{} `json:"description" field:"description"  type:"equal"`
-	// 【description】权限描述 in 查询
-	DescriptionIn []interface{} `json:"descriptionIn" field:"description"  type:"in"`
-	// 【description】权限描述 左匹配(xxx%)
-	DescriptionLeft interface{} `json:"descriptionLeft" field:"description"  type:"likeRight"`
-	// 【description】权限描述 右匹配(%xxx，查询有性能影响)
-	DescriptionRight interface{} `json:"descriptionRight" field:"description"  type:"likeLeft"`
-	// 【description】权限描述 模糊匹配(%xxx%，查询有性能影响)
-	DescriptionMiddle interface{} `json:"descriptionMiddle" field:"description"  type:"likeMiddle"`
 	// 【permission】权限值 全匹配
 	Permission interface{} `json:"permission" field:"permission"  type:"equal"`
 	// 【permission】权限值 in 查询
@@ -70,16 +66,18 @@ type RbacPermissionsQueryDto struct {
 	PermissionRight interface{} `json:"permissionRight" field:"permission"  type:"likeLeft"`
 	// 【permission】权限值 模糊匹配(%xxx%，查询有性能影响)
 	PermissionMiddle interface{} `json:"permissionMiddle" field:"permission"  type:"likeMiddle"`
+	// 【updated_at】UpdatedAt 时间范围（包含边界）
+	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
 	// 排序，例如：["id desc", "name asc"] 字段名为每个字段说明后的开头中【】内的内容，方式只能为 desc 或 asc。支持指定多个字段排序
 	OrderBy []string `json:"orderBy"`
 }
 
 // RbacPermissionsUpdateDto 更新请求 DTO
 type RbacPermissionsUpdateDto struct {
-	// Id
-    Id interface{} `json:"id"`
 	// 权限描述
     Description interface{} `json:"description"`
+	// Id
+    Id interface{} `json:"id"`
 	// 权限值
     Permission interface{} `json:"permission"`
 }

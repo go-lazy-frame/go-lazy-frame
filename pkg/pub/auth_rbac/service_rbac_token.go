@@ -6,11 +6,11 @@ package auth_rbac
 
 import (
 	"errors"
-	"github.com/google/uuid"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/update"
+	"github.com/google/uuid"
 )
 
 // =================================================================================
@@ -25,13 +25,12 @@ var (
 )
 
 // CreateRbacToken 创建
-func (*rbacTokenService) CreateRbacToken(d RbacTokenCreateDto) (*RbacToken, error) {
-	c := d.TransformTo()
-	err := db.DB.Create(c).Error
+func (*rbacTokenService) CreateRbacToken(d RbacTokenCreateDto) (*RbacTokenCreateDto, error) {
+	err := db.DB.Create(&d).Error
 	if err != nil {
 		return nil, errors.New("create failed：" + err.Error())
 	}
-	return c, nil
+	return &d, nil
 }
 
 // UpdateRbacToken 更新
@@ -192,15 +191,16 @@ func (s *rbacTokenService) GetToken(user *RbacUser) (string, error) {
 		}
 		logger.Sugar.Infof("用户 %s 已清除旧 Token\n", user.LoginName)
 	}
+	t := uuid.New().String()
 	token, err := s.CreateRbacToken(RbacTokenCreateDto{
-		Token:  uuid.New().String(),
-		UserId: user.ID,
+		Token:  &t,
+		UserId: &user.ID,
 	})
 	if err != nil {
 		return "", err
 	}
 
-	return token.Token ,nil
+	return *token.Token ,nil
 }
 
 // IsValid 判断 token 是否可用

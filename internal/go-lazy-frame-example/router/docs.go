@@ -1640,6 +1640,10 @@ var SwaggerDoc = `{
                     "description": "请求Body体参数",
                     "type": "string"
                 },
+                "id": {
+                    "description": "Id",
+                    "type": "integer"
+                },
                 "ip": {
                     "description": "IP地址",
                     "type": "string"
@@ -2025,6 +2029,10 @@ var SwaggerDoc = `{
                     "description": "权限描述",
                     "type": "string"
                 },
+                "id": {
+                    "description": "Id",
+                    "type": "integer"
+                },
                 "permission": {
                     "description": "权限值",
                     "type": "string"
@@ -2225,6 +2233,10 @@ var SwaggerDoc = `{
                 "roleName"
             ],
             "properties": {
+                "id": {
+                    "description": "Id",
+                    "type": "integer"
+                },
                 "roleDesc": {
                     "description": "角色描述",
                     "type": "string"
@@ -2453,6 +2465,10 @@ var SwaggerDoc = `{
                 "userId"
             ],
             "properties": {
+                "id": {
+                    "description": "Id",
+                    "type": "integer"
+                },
                 "token": {
                     "description": "Token",
                     "type": "string"

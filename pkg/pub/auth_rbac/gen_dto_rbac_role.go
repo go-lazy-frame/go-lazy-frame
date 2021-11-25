@@ -15,26 +15,25 @@ import (
 
 // RbacRoleCreateDto RbacRole 创建请求 DTO
 type RbacRoleCreateDto struct {
-	// 角色名
-    RoleName string `json:"roleName" binding:"required"`
+	// Id
+    Id *uint `json:"id"`
 	// 角色描述
-    RoleDesc string `json:"roleDesc"`
+    RoleDesc *string `json:"roleDesc"`
+	// 角色名
+    RoleName *string `json:"roleName" binding:"required"`
 	// 是否可用
-    Valid bool `json:"valid"`
+    Valid *bool `json:"valid"`
 }
 
-// TransformTo 从 RbacRoleCreateDto 转换为 实体
-func (me RbacRoleCreateDto) TransformTo() *RbacRole {
-	model := &RbacRole{
-		RoleName: me.RoleName,
-		RoleDesc: me.RoleDesc,
-		Valid: me.Valid,
-	}
-	return model
+// TableName 指定创建体表名
+func (RbacRoleCreateDto) TableName() string {
+	return "rbac_role"
 }
 
 // RbacRoleQueryDto 查询请求 DTO
 type RbacRoleQueryDto struct {
+	// 【created_at】CreatedAt 时间范围（包含边界）
+	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
 	// 【id】Id 全匹配
 	Id interface{} `json:"id" field:"id"  type:"equal"`
 	// 【id】Id in 查询
@@ -49,20 +48,6 @@ type RbacRoleQueryDto struct {
 	IdLt interface{} `json:"idLt" field:"id"  type:"lt"`
 	// 【id】Id 小于等于
 	IdLte interface{} `json:"idLte" field:"id"  type:"lte"`
-	// 【created_at】CreatedAt 时间范围（包含边界）
-	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
-	// 【updated_at】UpdatedAt 时间范围（包含边界）
-	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
-	// 【role_name】角色名 全匹配
-	RoleName interface{} `json:"roleName" field:"role_name"  type:"equal"`
-	// 【role_name】角色名 in 查询
-	RoleNameIn []interface{} `json:"roleNameIn" field:"role_name"  type:"in"`
-	// 【role_name】角色名 左匹配(xxx%)
-	RoleNameLeft interface{} `json:"roleNameLeft" field:"role_name"  type:"likeRight"`
-	// 【role_name】角色名 右匹配(%xxx，查询有性能影响)
-	RoleNameRight interface{} `json:"roleNameRight" field:"role_name"  type:"likeLeft"`
-	// 【role_name】角色名 模糊匹配(%xxx%，查询有性能影响)
-	RoleNameMiddle interface{} `json:"roleNameMiddle" field:"role_name"  type:"likeMiddle"`
 	// 【role_desc】角色描述 全匹配
 	RoleDesc interface{} `json:"roleDesc" field:"role_desc"  type:"equal"`
 	// 【role_desc】角色描述 in 查询
@@ -73,6 +58,18 @@ type RbacRoleQueryDto struct {
 	RoleDescRight interface{} `json:"roleDescRight" field:"role_desc"  type:"likeLeft"`
 	// 【role_desc】角色描述 模糊匹配(%xxx%，查询有性能影响)
 	RoleDescMiddle interface{} `json:"roleDescMiddle" field:"role_desc"  type:"likeMiddle"`
+	// 【role_name】角色名 全匹配
+	RoleName interface{} `json:"roleName" field:"role_name"  type:"equal"`
+	// 【role_name】角色名 in 查询
+	RoleNameIn []interface{} `json:"roleNameIn" field:"role_name"  type:"in"`
+	// 【role_name】角色名 左匹配(xxx%)
+	RoleNameLeft interface{} `json:"roleNameLeft" field:"role_name"  type:"likeRight"`
+	// 【role_name】角色名 右匹配(%xxx，查询有性能影响)
+	RoleNameRight interface{} `json:"roleNameRight" field:"role_name"  type:"likeLeft"`
+	// 【role_name】角色名 模糊匹配(%xxx%，查询有性能影响)
+	RoleNameMiddle interface{} `json:"roleNameMiddle" field:"role_name"  type:"likeMiddle"`
+	// 【updated_at】UpdatedAt 时间范围（包含边界）
+	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
 	// 【valid】是否可用 全匹配
 	Valid interface{} `json:"valid" field:"valid"  type:"equal"`
 	// 【valid】是否可用 in 查询
@@ -85,10 +82,10 @@ type RbacRoleQueryDto struct {
 type RbacRoleUpdateDto struct {
 	// Id
     Id interface{} `json:"id"`
-	// 角色名
-    RoleName interface{} `json:"roleName"`
 	// 角色描述
     RoleDesc interface{} `json:"roleDesc"`
+	// 角色名
+    RoleName interface{} `json:"roleName"`
 	// 是否可用
     Valid interface{} `json:"valid"`
 }

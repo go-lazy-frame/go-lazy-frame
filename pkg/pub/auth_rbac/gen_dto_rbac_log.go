@@ -16,34 +16,40 @@ import (
 // RbacLogCreateDto RbacLog 创建请求 DTO
 type RbacLogCreateDto struct {
 	// 请求Body体参数
-    Body string `json:"body"`
+    Body *string `json:"body"`
+	// Id
+    Id *uint `json:"id"`
 	// IP地址
-    Ip string `json:"ip" binding:"required"`
-	// 访问地址
-    Url string `json:"url" binding:"required"`
-	// 地址参数
-    UrlParams string `json:"urlParams" binding:"required"`
+    Ip *string `json:"ip" binding:"required"`
 	// 登陆用户
-    LoginName string `json:"loginName" binding:"required"`
+    LoginName *string `json:"loginName" binding:"required"`
 	// 状态 0：正常 1：鉴权失败
-    Status int64 `json:"status"`
+    Status *int64 `json:"status"`
+	// 访问地址
+    Url *string `json:"url" binding:"required"`
+	// 地址参数
+    UrlParams *string `json:"urlParams" binding:"required"`
 }
 
-// TransformTo 从 RbacLogCreateDto 转换为 实体
-func (me RbacLogCreateDto) TransformTo() *RbacLog {
-	model := &RbacLog{
-		Body: me.Body,
-		Ip: me.Ip,
-		Url: me.Url,
-		UrlParams: me.UrlParams,
-		LoginName: me.LoginName,
-		Status: me.Status,
-	}
-	return model
+// TableName 指定创建体表名
+func (RbacLogCreateDto) TableName() string {
+	return "rbac_log"
 }
 
 // RbacLogQueryDto 查询请求 DTO
 type RbacLogQueryDto struct {
+	// 【body】请求Body体参数 全匹配
+	Body interface{} `json:"body" field:"body"  type:"equal"`
+	// 【body】请求Body体参数 in 查询
+	BodyIn []interface{} `json:"bodyIn" field:"body"  type:"in"`
+	// 【body】请求Body体参数 左匹配(xxx%)
+	BodyLeft interface{} `json:"bodyLeft" field:"body"  type:"likeRight"`
+	// 【body】请求Body体参数 右匹配(%xxx，查询有性能影响)
+	BodyRight interface{} `json:"bodyRight" field:"body"  type:"likeLeft"`
+	// 【body】请求Body体参数 模糊匹配(%xxx%，查询有性能影响)
+	BodyMiddle interface{} `json:"bodyMiddle" field:"body"  type:"likeMiddle"`
+	// 【created_at】CreatedAt 时间范围（包含边界）
+	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
 	// 【id】Id 全匹配
 	Id interface{} `json:"id" field:"id"  type:"equal"`
 	// 【id】Id in 查询
@@ -58,20 +64,6 @@ type RbacLogQueryDto struct {
 	IdLt interface{} `json:"idLt" field:"id"  type:"lt"`
 	// 【id】Id 小于等于
 	IdLte interface{} `json:"idLte" field:"id"  type:"lte"`
-	// 【created_at】CreatedAt 时间范围（包含边界）
-	CreatedAtBetween []interface{} `json:"createdAtBetween" field:"created_at" type:"between"`
-	// 【updated_at】UpdatedAt 时间范围（包含边界）
-	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
-	// 【body】请求Body体参数 全匹配
-	Body interface{} `json:"body" field:"body"  type:"equal"`
-	// 【body】请求Body体参数 in 查询
-	BodyIn []interface{} `json:"bodyIn" field:"body"  type:"in"`
-	// 【body】请求Body体参数 左匹配(xxx%)
-	BodyLeft interface{} `json:"bodyLeft" field:"body"  type:"likeRight"`
-	// 【body】请求Body体参数 右匹配(%xxx，查询有性能影响)
-	BodyRight interface{} `json:"bodyRight" field:"body"  type:"likeLeft"`
-	// 【body】请求Body体参数 模糊匹配(%xxx%，查询有性能影响)
-	BodyMiddle interface{} `json:"bodyMiddle" field:"body"  type:"likeMiddle"`
 	// 【ip】IP地址 全匹配
 	Ip interface{} `json:"ip" field:"ip"  type:"equal"`
 	// 【ip】IP地址 in 查询
@@ -82,26 +74,6 @@ type RbacLogQueryDto struct {
 	IpRight interface{} `json:"ipRight" field:"ip"  type:"likeLeft"`
 	// 【ip】IP地址 模糊匹配(%xxx%，查询有性能影响)
 	IpMiddle interface{} `json:"ipMiddle" field:"ip"  type:"likeMiddle"`
-	// 【url】访问地址 全匹配
-	Url interface{} `json:"url" field:"url"  type:"equal"`
-	// 【url】访问地址 in 查询
-	UrlIn []interface{} `json:"urlIn" field:"url"  type:"in"`
-	// 【url】访问地址 左匹配(xxx%)
-	UrlLeft interface{} `json:"urlLeft" field:"url"  type:"likeRight"`
-	// 【url】访问地址 右匹配(%xxx，查询有性能影响)
-	UrlRight interface{} `json:"urlRight" field:"url"  type:"likeLeft"`
-	// 【url】访问地址 模糊匹配(%xxx%，查询有性能影响)
-	UrlMiddle interface{} `json:"urlMiddle" field:"url"  type:"likeMiddle"`
-	// 【url_params】地址参数 全匹配
-	UrlParams interface{} `json:"urlParams" field:"url_params"  type:"equal"`
-	// 【url_params】地址参数 in 查询
-	UrlParamsIn []interface{} `json:"urlParamsIn" field:"url_params"  type:"in"`
-	// 【url_params】地址参数 左匹配(xxx%)
-	UrlParamsLeft interface{} `json:"urlParamsLeft" field:"url_params"  type:"likeRight"`
-	// 【url_params】地址参数 右匹配(%xxx，查询有性能影响)
-	UrlParamsRight interface{} `json:"urlParamsRight" field:"url_params"  type:"likeLeft"`
-	// 【url_params】地址参数 模糊匹配(%xxx%，查询有性能影响)
-	UrlParamsMiddle interface{} `json:"urlParamsMiddle" field:"url_params"  type:"likeMiddle"`
 	// 【login_name】登陆用户 全匹配
 	LoginName interface{} `json:"loginName" field:"login_name"  type:"equal"`
 	// 【login_name】登陆用户 in 查询
@@ -126,26 +98,48 @@ type RbacLogQueryDto struct {
 	StatusLt interface{} `json:"statusLt" field:"status"  type:"lt"`
 	// 【status】状态 0：正常 1：鉴权失败 小于等于
 	StatusLte interface{} `json:"statusLte" field:"status"  type:"lte"`
+	// 【updated_at】UpdatedAt 时间范围（包含边界）
+	UpdatedAtBetween []interface{} `json:"updatedAtBetween" field:"updated_at" type:"between"`
+	// 【url】访问地址 全匹配
+	Url interface{} `json:"url" field:"url"  type:"equal"`
+	// 【url】访问地址 in 查询
+	UrlIn []interface{} `json:"urlIn" field:"url"  type:"in"`
+	// 【url】访问地址 左匹配(xxx%)
+	UrlLeft interface{} `json:"urlLeft" field:"url"  type:"likeRight"`
+	// 【url】访问地址 右匹配(%xxx，查询有性能影响)
+	UrlRight interface{} `json:"urlRight" field:"url"  type:"likeLeft"`
+	// 【url】访问地址 模糊匹配(%xxx%，查询有性能影响)
+	UrlMiddle interface{} `json:"urlMiddle" field:"url"  type:"likeMiddle"`
+	// 【url_params】地址参数 全匹配
+	UrlParams interface{} `json:"urlParams" field:"url_params"  type:"equal"`
+	// 【url_params】地址参数 in 查询
+	UrlParamsIn []interface{} `json:"urlParamsIn" field:"url_params"  type:"in"`
+	// 【url_params】地址参数 左匹配(xxx%)
+	UrlParamsLeft interface{} `json:"urlParamsLeft" field:"url_params"  type:"likeRight"`
+	// 【url_params】地址参数 右匹配(%xxx，查询有性能影响)
+	UrlParamsRight interface{} `json:"urlParamsRight" field:"url_params"  type:"likeLeft"`
+	// 【url_params】地址参数 模糊匹配(%xxx%，查询有性能影响)
+	UrlParamsMiddle interface{} `json:"urlParamsMiddle" field:"url_params"  type:"likeMiddle"`
 	// 排序，例如：["id desc", "name asc"] 字段名为每个字段说明后的开头中【】内的内容，方式只能为 desc 或 asc。支持指定多个字段排序
 	OrderBy []string `json:"orderBy"`
 }
 
 // RbacLogUpdateDto 更新请求 DTO
 type RbacLogUpdateDto struct {
-	// Id
-    Id interface{} `json:"id"`
 	// 请求Body体参数
     Body interface{} `json:"body"`
+	// Id
+    Id interface{} `json:"id"`
 	// IP地址
     Ip interface{} `json:"ip"`
-	// 访问地址
-    Url interface{} `json:"url"`
-	// 地址参数
-    UrlParams interface{} `json:"urlParams"`
 	// 登陆用户
     LoginName interface{} `json:"loginName"`
 	// 状态 0：正常 1：鉴权失败
     Status interface{} `json:"status"`
+	// 访问地址
+    Url interface{} `json:"url"`
+	// 地址参数
+    UrlParams interface{} `json:"urlParams"`
 }
 
 // RbacLogPageDto 查询请求（分页） DTO

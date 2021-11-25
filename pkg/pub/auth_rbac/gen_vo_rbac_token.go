@@ -15,14 +15,16 @@ import (
 )
 
 type RbacTokenVo struct {
-	// Id
-    Id uint `json:"id"`
 	// CreatedAt
     CreatedAt string `json:"createdAt"`
-	// UpdatedAt
-    UpdatedAt string `json:"updatedAt"`
+	// DeletedAt
+    DeletedAt string `json:"deletedAt"`
+	// Id
+    Id uint `json:"id"`
 	// Token
     Token string `json:"token"`
+	// UpdatedAt
+    UpdatedAt string `json:"updatedAt"`
 	// 用户ID
     UserId uint `json:"userId"`
 }
@@ -30,10 +32,10 @@ type RbacTokenVo struct {
 // Transform 从实体 RbacToken 转换为 Vo
 func (RbacTokenVo) Transform(m RbacToken) RbacTokenVo {
 	vo := RbacTokenVo{}
-	vo.Id = m.ID
 	vo.CreatedAt = util.TimeUtil.GetTimeFormatByFormat(m.CreatedAt, util.GolangBirthTime)
-	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
+	vo.Id = m.ID
 	vo.Token = m.Token
+	vo.UpdatedAt = util.TimeUtil.GetTimeFormatByFormat(m.UpdatedAt, util.GolangBirthTime)
 	vo.UserId = m.UserId
 	return vo
 }
@@ -41,10 +43,10 @@ func (RbacTokenVo) Transform(m RbacToken) RbacTokenVo {
 // TransformTo 从 RbacTokenVo 转换为 实体
 func (me RbacTokenVo) TransformTo() RbacToken {
 	model := RbacToken{}
-	model.ID = me.Id
 	model.CreatedAt = *util.TimeUtil.TimeParseByFormat(me.CreatedAt, util.GolangBirthTime)
-	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
+	model.ID = me.Id
 	model.Token = me.Token
+	model.UpdatedAt = *util.TimeUtil.TimeParseByFormat(me.UpdatedAt, util.GolangBirthTime)
 	model.UserId = me.UserId
 	return model
 }
