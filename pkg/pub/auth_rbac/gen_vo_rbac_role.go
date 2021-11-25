@@ -21,8 +21,6 @@ type RbacRoleVo struct {
     CreatedAt string `json:"createdAt"`
 	// UpdatedAt
     UpdatedAt string `json:"updatedAt"`
-	// DeletedAt
-    DeletedAt string `json:"deletedAt"`
 	// 角色名
     RoleName string `json:"roleName"`
 	// 角色描述

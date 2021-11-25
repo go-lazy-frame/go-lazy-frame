@@ -21,8 +21,6 @@ type RbacTokenVo struct {
     CreatedAt string `json:"createdAt"`
 	// UpdatedAt
     UpdatedAt string `json:"updatedAt"`
-	// DeletedAt
-    DeletedAt string `json:"deletedAt"`
 	// Token
     Token string `json:"token"`
 	// 用户ID

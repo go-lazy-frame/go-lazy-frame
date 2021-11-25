@@ -21,8 +21,6 @@ type RbacLogVo struct {
     CreatedAt string `json:"createdAt"`
 	// UpdatedAt
     UpdatedAt string `json:"updatedAt"`
-	// DeletedAt
-    DeletedAt string `json:"deletedAt"`
 	// 请求Body体参数
     Body string `json:"body"`
 	// IP地址

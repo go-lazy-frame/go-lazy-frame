@@ -128,7 +128,11 @@ func UpdateDocsGo(dirs []string, docsPath string, config configs.Config, swagger
 
 	if configs.GeneralConfig.EnableRbacAuth {
 		projectHome := os.Getenv("projectHome")
-		dirs = append(dirs, path.Join(projectHome, "vendor/github.com/go-lazy-frame/go-lazy-frame/pkg/pub/auth_rbac")+"/")
+		if configs.GeneralConfig.AppName == "go_lazy_frame_example" {
+			dirs = append(dirs, path.Join(projectHome, "pkg/pub/auth_rbac")+"/")
+		} else {
+			dirs = append(dirs, path.Join(projectHome, "vendor/github.com/go-lazy-frame/go-lazy-frame/pkg/pub/auth_rbac")+"/")
+		}
 	}
 
 	c := &gen.Config{

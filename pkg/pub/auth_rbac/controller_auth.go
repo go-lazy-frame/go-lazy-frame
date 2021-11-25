@@ -74,12 +74,19 @@ func (me AuthController) Login(c *gin.Context) {
 		me.Failed(c, err.Error())
 		return
 	}
+
+	permissions, err := RbacUserService.GetPermissions(user)
+	if err != nil {
+		me.Failed(c, err.Error())
+		return
+	}
+
 	me.Success(c, LoginVo{
 		LoginName:   user.LoginName,
 		Nickname:    user.Nickname,
 		Phone:       user.Phone,
 		Token:       token,
-		Permissions: []RbacPermissionsVo{},
+		Permissions: permissions,
 	})
 }
 

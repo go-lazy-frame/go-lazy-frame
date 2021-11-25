@@ -7,11 +7,11 @@ package auth_rbac
 import (
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/query"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/update"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
+	"github.com/google/uuid"
 )
 
 // =================================================================================
@@ -194,4 +194,42 @@ func (me *rbacUserService) FindRbacUserByToken(token string) (RbacUser, error) {
 // GeneratePswd 生成密码
 func (me *rbacUserService) GeneratePswd(loginPswd string, salt string) string {
 	return util.Md5Util.Md5(salt + loginPswd + salt)
+}
+
+// GetPermissions 获取用户的权限
+func (me *rbacUserService) GetPermissions(user RbacUser) ([]RbacPermissionsVo, error) {
+	var permissions []RbacPermissionsVo
+	if user.SuperAdmin {
+		permissions = append(permissions, RbacPermissionsVo{
+			Id:          0,
+			Description: "超级管理员",
+			Permission:  "superAdmin",
+		})
+	}
+	if user.Admin {
+		permissions = append(permissions, RbacPermissionsVo{
+			Id:          0,
+			Description: "管理员",
+			Permission:  "admin",
+		})
+	}
+
+	// 查询被关联授权的权限
+	var roles []*RbacRole
+	err := db.DB.Model(&user).Association("Roles").Find(&roles)
+	if err != nil {
+		return nil, err
+	}
+	for _, role := range roles {
+		var per []*RbacPermissions
+		err = db.DB.Model(role).Association("Permissions").Find(&per)
+		if err != nil {
+			return nil, err
+		}
+		for _, rbacPermissions := range per {
+			permissions = append(permissions, new(RbacPermissionsVo).Transform(*rbacPermissions))
+		}
+	}
+
+	return permissions, nil
 }

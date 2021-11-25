@@ -21,8 +21,6 @@ type RbacPermissionsVo struct {
     CreatedAt string `json:"createdAt"`
 	// UpdatedAt
     UpdatedAt string `json:"updatedAt"`
-	// DeletedAt
-    DeletedAt string `json:"deletedAt"`
 	// 权限描述
     Description string `json:"description"`
 	// 权限值

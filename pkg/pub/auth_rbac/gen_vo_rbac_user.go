@@ -21,8 +21,6 @@ type RbacUserVo struct {
     CreatedAt string `json:"createdAt"`
 	// UpdatedAt
     UpdatedAt string `json:"updatedAt"`
-	// DeletedAt
-    DeletedAt string `json:"deletedAt"`
 	// 是否超级管理员
     SuperAdmin bool `json:"superAdmin"`
 	// 是否管理员
