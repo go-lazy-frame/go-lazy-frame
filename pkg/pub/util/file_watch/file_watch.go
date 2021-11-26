@@ -46,6 +46,8 @@ type FileWatch struct {
 	watcher   *fsnotify.Watcher
 	// 判断新文件是否写完的时间更新阈值，默认 500（根据网络环境，自行调整），单位毫秒
 	WriteTime int64
+	// 是否允许 Debug 日志输出，默认 false
+	EnableDebugLog bool
 }
 
 // StartFileWatch 开始目录监听
@@ -93,7 +95,9 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 							}
 						} else {
 							receiver.filesRecordCache.Store(event.Name, util.TimeUtil.GetMilliTime(time.Now()))
-							logger.Sugar.Debugf("发现新文件：%s，正在等待其写入完成...\n", event.Name)
+							if receiver.EnableDebugLog {
+								logger.Sugar.Debugf("发现新文件：%s，正在等待其写入完成...\n", event.Name)
+							}
 							go func() {
 								for {
 									if t, ok := receiver.filesRecordCache.Load(event.Name); ok {
