@@ -23,7 +23,6 @@
 package main
 
 import (
-	"github.com/go-lazy-frame/go-lazy-frame/configs"
 	"github.com/go-lazy-frame/go-lazy-frame/internal/go-lazy-frame-example/router"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/db"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
@@ -42,7 +41,6 @@ import (
 // @contact.email 642321251@qq.com
 // @BasePath /api/v1
 func main() {
-	logger.Init(configs.GeneralConfig.AppName)
 	db.Init()
 
 	// 启动 Web 服务

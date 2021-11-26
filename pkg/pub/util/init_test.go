@@ -25,5 +25,5 @@ package util
 import "github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 
 func init() {
-	logger.Init("sand_server")
+	logger.Init("sand_server", 0, 0, 0)
 }

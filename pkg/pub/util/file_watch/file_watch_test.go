@@ -28,7 +28,7 @@ import (
 )
 
 func init() {
-	logger.Init("sand_server")
+	logger.Init("sand_server", 0, 0, 0)
 }
 
 func TestFileWatch(t *testing.T) {

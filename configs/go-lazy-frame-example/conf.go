@@ -44,6 +44,8 @@ func ConfInit() {
 	// 从环境变量更新配置
 	configs.ConfigByEnv(&Config)
 
+	logger.Init(configs.GeneralConfig.AppName, Config.LogMaxSize, Config.LogMaxBackups, Config.LogMaxAge)
+	
 	// 加载日志配置
 	logger.Level = configs.GetLoggerLevelByConfig(Config.LogLevel)
 	logger.Target = configs.GetLoggerTargetByConfig(Config.LogTarget)

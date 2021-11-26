@@ -62,11 +62,13 @@ type Config struct {
 	ApiPrefix         string   `json:"api_prefix"`           // API 接口地址的前缀
 	MysqlMaxOpenConns int      `json:"mysql_max_open_conns"` // 0：不限制（注意是否会触发到 mysql 数据库的最大连接数）
 	MysqlMaxIdleConns int      `json:"mysql_max_idle_conns"`
-	MysqlConn         string   `json:"mysql_conn"`     // 数据库连接地址
-	RedisIP           string   `json:"redis_ip"`       // Redis 连接地址
-	RedisPassword     string   `json:"redis_password"` // Redis 连接密码
-	NotAuthUrl        []string `json:"not_auth_url"`   // 不用鉴权的访问地址前缀
-	Test              string   `json:"test"`
+	MysqlConn         string   `json:"mysql_conn"`      // 数据库连接地址
+	RedisIP           string   `json:"redis_ip"`        // Redis 连接地址
+	RedisPassword     string   `json:"redis_password"`  // Redis 连接密码
+	NotAuthUrl        []string `json:"not_auth_url"`    // 不用鉴权的访问地址前缀
+	LogMaxBackups     int      `json:"log_max_backups"` // 日志的最大备份文件个数，默认 30
+	LogMaxSize        int      `json:"log_max_size"`    // 单个日志文件最大文件大小，单位 MB，默认 50
+	LogMaxAge         int      `json:"log_max_age"`     // 日志文件保留的最长天数，默认 7 天
 }
 
 func GetLoggerLevelByConfig(logLevel string) zapcore.Level {

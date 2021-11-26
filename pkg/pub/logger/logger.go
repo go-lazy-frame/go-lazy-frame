@@ -47,12 +47,21 @@ func TimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 }
 
-func Init(appName string) {
+func Init(appName string, maxSize, maxBackups, maxAge int) {
+	if maxAge == 0 {
+		maxAge = 7
+	}
+	if maxBackups == 0 {
+		maxBackups = 30
+	}
+	if maxSize == 0 {
+		maxSize = 50
+	}
 	w := zapcore.AddSync(&lumberjackv2.Logger{
 		Filename:   "log/" + appName + ".log",
-		MaxSize:    50, // MB
-		MaxBackups: 10,
-		MaxAge:     7, // days
+		MaxSize:    maxSize, // MB
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge, // days
 	})
 
 	var writeSyncer zapcore.WriteSyncer
