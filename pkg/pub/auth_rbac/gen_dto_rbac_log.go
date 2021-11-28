@@ -25,7 +25,7 @@ type RbacLogCreateDto struct {
 	// 登陆用户
     LoginName *string `json:"loginName" binding:"required"`
 	// 状态 0：正常 1：鉴权失败
-    Status *int64 `json:"status"`
+    Status *int64 `json:"status" gorm:"default:0"`
 	// 访问地址
     Url *string `json:"url" binding:"required"`
 	// 地址参数

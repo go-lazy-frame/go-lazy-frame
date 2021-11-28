@@ -19,11 +19,11 @@ type RbacRoleCreateDto struct {
 	// Id
     Id *uint `json:"id"`
 	// 角色描述
-    RoleDesc *string `json:"roleDesc"`
+    RoleDesc *string `json:"roleDesc" gorm:"default:"`
 	// 角色名
     RoleName *string `json:"roleName" binding:"required"`
 	// 是否可用
-    Valid *bool `json:"valid"`
+    Valid *bool `json:"valid" gorm:"default:1"`
 }
 
 // TableName 指定创建体表名

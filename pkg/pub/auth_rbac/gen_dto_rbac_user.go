@@ -17,7 +17,7 @@ import (
 // RbacUserCreateDto RbacUser 创建请求 DTO
 type RbacUserCreateDto struct {
 	// 是否管理员
-    Admin *bool `json:"admin"`
+    Admin *bool `json:"admin" gorm:"default:0"`
 	// Id
     Id *uint `json:"id"`
 	// 登录名
@@ -25,15 +25,15 @@ type RbacUserCreateDto struct {
 	// 登陆密码
     LoginPswd *string `json:"loginPswd" binding:"required"`
 	// 昵称
-    Nickname *string `json:"nickname"`
+    Nickname *string `json:"nickname" gorm:"default:"`
 	// 手机号
-    Phone *string `json:"phone"`
+    Phone *string `json:"phone" gorm:"default:"`
 	// 密码加盐
     Salt *string `json:"salt" binding:"required"`
 	// 状态 1:账号正常 0:账号禁用 -1:账号违规
-    Status *int64 `json:"status"`
+    Status *int64 `json:"status" gorm:"default:1"`
 	// 是否超级管理员
-    SuperAdmin *bool `json:"superAdmin"`
+    SuperAdmin *bool `json:"superAdmin" gorm:"default:0"`
 }
 
 // TableName 指定创建体表名
