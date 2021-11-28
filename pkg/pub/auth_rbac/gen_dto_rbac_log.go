@@ -15,6 +15,7 @@ import (
 )
 
 // RbacLogCreateDto RbacLog 创建请求 DTO
+// 注意：为解决 Golang 的零值问题，该 DTO 字段都为指针类型。设值时，可使用 util.ValueUtil 的 XxxPointer 系列方法进行赋值
 type RbacLogCreateDto struct {
 	// 请求Body体参数
     Body *string `json:"body"`
