@@ -36,19 +36,19 @@ type stringUtil struct {
 
 }
 
-func (me *stringUtil) IsEmpty(str string) bool {
+func (receiver *stringUtil) IsEmpty(str string) bool {
 	if str == "" {
 		return true
 	}
 	return false
 }
 
-func (me *stringUtil) IsNotEmpty(str string) bool {
-	return !me.IsEmpty(str)
+func (receiver *stringUtil) IsNotEmpty(str string) bool {
+	return !receiver.IsEmpty(str)
 }
 
-func (me *stringUtil) IsBlank(str string) bool {
-	if me.IsEmpty(str) {
+func (receiver *stringUtil) IsBlank(str string) bool {
+	if receiver.IsEmpty(str) {
 		return true
 	}
 	if len(strings.TrimSpace(str)) == 0 {
@@ -57,12 +57,12 @@ func (me *stringUtil) IsBlank(str string) bool {
 	return false
 }
 
-func (me *stringUtil) IsNotBlank(str string) bool {
-	return !me.IsBlank(str)
+func (receiver *stringUtil) IsNotBlank(str string) bool {
+	return !receiver.IsBlank(str)
 }
 
 // IsMatch 是否匹配指定的正则表达式
-func (me *stringUtil) IsMatch(str string, pattern string) bool {
+func (receiver *stringUtil) IsMatch(str string, pattern string) bool {
 	m, err := regexp.Match(pattern, []byte(str))
 	if err != nil {
 		logger.Sugar.Error(err)
@@ -72,40 +72,40 @@ func (me *stringUtil) IsMatch(str string, pattern string) bool {
 }
 
 // IsIp 是否是 IP 地址
-func (me *stringUtil) IsIp(str string) bool {
-	return me.IsMatch(str, `((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))`)
+func (receiver *stringUtil) IsIp(str string) bool {
+	return receiver.IsMatch(str, `((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))`)
 }
 
 // MatchingRate 基于编辑距离算法，计算两个字符串的相似度（0 到 1 之间），越靠近 1 代表越相似
-func (me *stringUtil) MatchingRate(str1, str2 string, ignoreCase bool) float64 {
+func (receiver *stringUtil) MatchingRate(str1, str2 string, ignoreCase bool) float64 {
 	if str1 == str2 {
 		return 1
 	}
-	distance := me.EditDistanceDP(str1, str2, ignoreCase)
+	distance := receiver.EditDistanceDP(str1, str2, ignoreCase)
 	if distance == 0 {
 		return 1
 	}
-	totalDistance := float64(me.getMaxEditDistance(str1, str2, ignoreCase))
+	totalDistance := float64(receiver.getMaxEditDistance(str1, str2, ignoreCase))
 	return float64(1) - (float64(distance) / float64(totalDistance))
 }
 
 // 获取最大距离
-func (me *stringUtil) getMaxEditDistance(str1, str2 string, ignoreCase bool) int {
+func (receiver *stringUtil) getMaxEditDistance(str1, str2 string, ignoreCase bool) int {
 	if ignoreCase {
 		str1 = strings.ToLower(str1)
 		str2 = strings.ToLower(str2)
 	}
 	var totalDistance int
 	if len(str1) == len(str2) || len(str1) > len(str2) {
-		totalDistance = me.EditDistanceDP(str1, "", ignoreCase)
+		totalDistance = receiver.EditDistanceDP(str1, "", ignoreCase)
 	} else {
-		totalDistance = me.EditDistanceDP(str2, "", ignoreCase)
+		totalDistance = receiver.EditDistanceDP(str2, "", ignoreCase)
 	}
 	return totalDistance
 }
 
 // EditDistanceDP 编辑距离计算
-func (me *stringUtil) EditDistanceDP(str1, str2 string, ignoreCase bool) int {
+func (receiver *stringUtil) EditDistanceDP(str1, str2 string, ignoreCase bool) int {
 	if ignoreCase {
 		str1 = strings.ToLower(str1)
 		str2 = strings.ToLower(str2)
