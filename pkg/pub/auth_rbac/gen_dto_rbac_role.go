@@ -17,8 +17,7 @@ import (
 // RbacRoleCreateDto RbacRole 创建请求 DTO
 // 注意：为解决 Golang 的零值问题，该 DTO 字段都为指针类型。设值时，可使用 util.ValueUtil 的 XxxPointer 系列方法进行赋值
 type RbacRoleCreateDto struct {
-	// Id
-    Id *uint `json:"id"`
+	gorm.Model
 	// 角色描述
     RoleDesc *string `json:"roleDesc" gorm:"default:"`
 	// 角色名
@@ -35,9 +34,7 @@ func (RbacRoleCreateDto) TableName() string {
 // TransformTo 从 RbacRoleCreateDto 转换为 实体
 func (me RbacRoleCreateDto) TransformTo() *RbacRole {
 	model := &RbacRole{}
-	if me.Id != nil {
-		model.Model = gorm.Model{ID: *me.Id}
-	}
+	model.Model = me.Model
 	if me.RoleDesc != nil {
 		model.RoleDesc = *me.RoleDesc
 	}

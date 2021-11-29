@@ -17,10 +17,9 @@ import (
 // RbacPermissionsCreateDto RbacPermissions 创建请求 DTO
 // 注意：为解决 Golang 的零值问题，该 DTO 字段都为指针类型。设值时，可使用 util.ValueUtil 的 XxxPointer 系列方法进行赋值
 type RbacPermissionsCreateDto struct {
+	gorm.Model
 	// 权限描述
     Description *string `json:"description" binding:"required"`
-	// Id
-    Id *uint `json:"id"`
 	// 权限值
     Permission *string `json:"permission" binding:"required"`
 }
@@ -33,9 +32,7 @@ func (RbacPermissionsCreateDto) TableName() string {
 // TransformTo 从 RbacPermissionsCreateDto 转换为 实体
 func (me RbacPermissionsCreateDto) TransformTo() *RbacPermissions {
 	model := &RbacPermissions{}
-	if me.Id != nil {
-		model.Model = gorm.Model{ID: *me.Id}
-	}
+	model.Model = me.Model
 	if me.Description != nil {
 		model.Description = *me.Description
 	}

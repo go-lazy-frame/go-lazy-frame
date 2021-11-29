@@ -17,10 +17,9 @@ import (
 // RbacLogCreateDto RbacLog 创建请求 DTO
 // 注意：为解决 Golang 的零值问题，该 DTO 字段都为指针类型。设值时，可使用 util.ValueUtil 的 XxxPointer 系列方法进行赋值
 type RbacLogCreateDto struct {
+	gorm.Model
 	// 请求Body体参数
     Body *string `json:"body"`
-	// Id
-    Id *uint `json:"id"`
 	// IP地址
     Ip *string `json:"ip" binding:"required"`
 	// 登陆用户
@@ -41,9 +40,7 @@ func (RbacLogCreateDto) TableName() string {
 // TransformTo 从 RbacLogCreateDto 转换为 实体
 func (me RbacLogCreateDto) TransformTo() *RbacLog {
 	model := &RbacLog{}
-	if me.Id != nil {
-		model.Model = gorm.Model{ID: *me.Id}
-	}
+	model.Model = me.Model
 	if me.Body != nil {
 		model.Body = *me.Body
 	}

@@ -17,8 +17,7 @@ import (
 // RbacTokenCreateDto RbacToken 创建请求 DTO
 // 注意：为解决 Golang 的零值问题，该 DTO 字段都为指针类型。设值时，可使用 util.ValueUtil 的 XxxPointer 系列方法进行赋值
 type RbacTokenCreateDto struct {
-	// Id
-    Id *uint `json:"id"`
+	gorm.Model
 	// Token
     Token *string `json:"token" binding:"required"`
 	// 用户ID
@@ -33,9 +32,7 @@ func (RbacTokenCreateDto) TableName() string {
 // TransformTo 从 RbacTokenCreateDto 转换为 实体
 func (me RbacTokenCreateDto) TransformTo() *RbacToken {
 	model := &RbacToken{}
-	if me.Id != nil {
-		model.Model = gorm.Model{ID: *me.Id}
-	}
+	model.Model = me.Model
 	if me.Token != nil {
 		model.Token = *me.Token
 	}
