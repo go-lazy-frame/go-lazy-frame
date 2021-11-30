@@ -39,6 +39,7 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"runtime"
 	"strings"
 )
 
@@ -125,9 +126,12 @@ func UpdateDocsGo(dirs []string, docsPath string, config configs.Config, swagger
 		fmt.Printf("接口文档自动更新失败：docs go 文件: %s 不存在，\n", docsPath)
 		return
 	}
-
+	projectHome := os.Getenv("projectHome")
+	if projectHome != "" {
+		dirs = append(dirs, path.Join(projectHome, "vendor/gorm.io/gorm") + "/")
+		dirs = append(dirs, path.Join(runtime.GOROOT(), "src/database/sql") + "/")
+	}
 	if configs.GeneralConfig.EnableRbacAuth {
-		projectHome := os.Getenv("projectHome")
 		if configs.GeneralConfig.AppName == "go_lazy_frame_example" {
 			dirs = append(dirs, path.Join(projectHome, "pkg/pub/auth_rbac")+"/")
 		} else {

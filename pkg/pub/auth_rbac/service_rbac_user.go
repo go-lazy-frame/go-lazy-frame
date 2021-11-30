@@ -268,3 +268,35 @@ func (me *rbacUserService) SelfModifyPassword(token string, dto SelfModifyPasswo
 		LoginPswd: me.GeneratePswd(dto.Password, user.Salt),
 	})
 }
+
+func (me *rbacUserService) DeleteById(id uint, token string) error {
+	user, err := me.FindRbacUserByToken(token)
+	if err != nil {
+		return err
+	}
+	if !user.SuperAdmin {
+		return errors.New("操作失败：权限不足")
+	}
+	if user.ID == id {
+		return errors.New("操作失败：不能删除当前的登陆账号")
+	}
+	return me.DeleteUnscopedById(id)
+}
+
+func (me *rbacUserService) ResetPasswordById(id uint, token string) error {
+	user, err := me.FindRbacUserByToken(token)
+	if err != nil {
+		return err
+	}
+	if !user.SuperAdmin {
+		return errors.New("操作失败：权限不足")
+	}
+	u, err := me.FindById(id)
+	if err != nil {
+		return err
+	}
+	return me.UpdateRbacUser(RbacUserUpdateDto{
+		Id: u.ID,
+		LoginPswd: me.GeneratePswd("123456", u.Salt),
+	})
+}

@@ -25,6 +25,8 @@ type RbacUserController struct {
 	WebCreate interface{} `url:"/rbac_user/create" method:"post"`
 	WebUpdate interface{} `url:"/rbac_user/update" method:"post"`
 	WebFindById interface{} `url:"/rbac_user/find_by_id" method:"get"`
+	WebDeleteById interface{} `url:"/rbac_user/delete_by_id" method:"get"`
+	WebResetPasswordById interface{} `url:"/rbac_user/reset_password_by_id" method:"get"`
 	WebFindByLoginName interface{} `url:"/rbac_user/find_by_login_name" method:"get"`
 }
 
@@ -189,6 +191,62 @@ func (me RbacUserController) FindByLoginName(c *gin.Context) {
 			return
 		}
 		me.Success(c, m)
+		return
+	}
+	me.Failed(c, "参数错误")
+}
+
+// DeleteById
+// 注意：以下的 id 必须设置，且必须全局唯一，否则接口文档页面无法正常显示
+// @id RbacUserDeleteByIdUsingGET
+// @Tags 用户
+// @Summary 删除ById
+// @Description 用户删除ById
+// @Accept json
+// @Produce  json
+// @Param token header string true "登陆成功后的授权 Token，后续的所有接口header，都要带上 token"
+// @Param id query integer true "id"
+// 		参数名 参数类型(query,path,header,body,formData) 数据类型(string,integer,number,boolean,user defined struct) 是否必传 描述
+// @Success 200 {object} vo.ResponseResult{}
+// @Failure 500 {object} vo.ResponseResult{}
+// @Router /rbac_user/delete_by_id [get]
+func (me RbacUserController) DeleteById(c *gin.Context) {
+	token := c.GetHeader("token")
+	if id,ok := c.GetQuery("id"); ok {
+		err := RbacUserService.DeleteById(util.NumberUtil.StringToUInt(id), token)
+		if err != nil {
+			me.Failed(c, err.Error())
+			return
+		}
+		me.Success(c, "删除成功")
+		return
+	}
+	me.Failed(c, "参数错误")
+}
+
+// ResetPasswordById
+// 注意：以下的 id 必须设置，且必须全局唯一，否则接口文档页面无法正常显示
+// @id RbacUserResetPasswordByIdUsingGET
+// @Tags 用户
+// @Summary 重置密码
+// @Description 重置密码
+// @Accept json
+// @Produce  json
+// @Param token header string true "登陆成功后的授权 Token，后续的所有接口header，都要带上 token"
+// @Param id query integer true "id"
+// 		参数名 参数类型(query,path,header,body,formData) 数据类型(string,integer,number,boolean,user defined struct) 是否必传 描述
+// @Success 200 {object} vo.ResponseResult{}
+// @Failure 500 {object} vo.ResponseResult{}
+// @Router /rbac_user/reset_password_by_id [get]
+func (me RbacUserController) ResetPasswordById(c *gin.Context) {
+	token := c.GetHeader("token")
+	if id,ok := c.GetQuery("id"); ok {
+		err := RbacUserService.ResetPasswordById(util.NumberUtil.StringToUInt(id), token)
+		if err != nil {
+			me.Failed(c, err.Error())
+			return
+		}
+		me.Success(c, "该账户密码已重置为 123456")
 		return
 	}
 	me.Failed(c, "参数错误")

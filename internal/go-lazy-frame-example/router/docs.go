@@ -1242,6 +1242,52 @@ var SwaggerDoc = `{
                 }
             }
         },
+        "/rbac_user/delete_by_id": {
+            "get": {
+                "description": "用户删除ById",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "删除ById",
+                "operationId": "RbacUserDeleteByIdUsingGET",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登陆成功后的授权 Token，后续的所有接口header，都要带上 token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
         "/rbac_user/find_by_id": {
             "get": {
                 "description": "用户查询ById",
@@ -1412,6 +1458,52 @@ var SwaggerDoc = `{
                         "schema": {
                             "$ref": "#/definitions/auth_rbac.RbacUserPageDto"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/vo.ResponseResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/rbac_user/reset_password_by_id": {
+            "get": {
+                "description": "重置密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "重置密码",
+                "operationId": "RbacUserResetPasswordByIdUsingGET",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登陆成功后的授权 Token，后续的所有接口header，都要带上 token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1640,8 +1732,13 @@ var SwaggerDoc = `{
                     "description": "请求Body体参数",
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "id": {
-                    "description": "Id",
                     "type": "integer"
                 },
                 "ip": {
@@ -1655,6 +1752,9 @@ var SwaggerDoc = `{
                 "status": {
                     "description": "状态 0：正常 1：鉴权失败",
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 },
                 "url": {
                     "description": "访问地址",
@@ -2025,16 +2125,24 @@ var SwaggerDoc = `{
                 "permission"
             ],
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "description": {
                     "description": "权限描述",
                     "type": "string"
                 },
                 "id": {
-                    "description": "Id",
                     "type": "integer"
                 },
                 "permission": {
                     "description": "权限值",
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -2233,8 +2341,13 @@ var SwaggerDoc = `{
                 "roleName"
             ],
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "id": {
-                    "description": "Id",
                     "type": "integer"
                 },
                 "roleDesc": {
@@ -2243,6 +2356,9 @@ var SwaggerDoc = `{
                 },
                 "roleName": {
                     "description": "角色名",
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 },
                 "valid": {
@@ -2465,12 +2581,20 @@ var SwaggerDoc = `{
                 "userId"
             ],
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
                 "id": {
-                    "description": "Id",
                     "type": "integer"
                 },
                 "token": {
                     "description": "Token",
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 },
                 "userId": {
@@ -3061,6 +3185,18 @@ var SwaggerDoc = `{
                 },
                 "phone": {
                     "type": "string"
+                }
+            }
+        },
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
                 }
             }
         },
