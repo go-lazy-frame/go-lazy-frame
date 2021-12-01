@@ -99,21 +99,21 @@ func (me *timeUtil) GetCurrentMonthEnd() string {
 func (me *timeUtil) nextYearMonth(year,month int) string {
 	switch month {
 	case 1:
-		return fmt.Sprintf("%d-%d", year, 2)
+		return fmt.Sprintf("%d-0%d", year, 2)
 	case 2:
-		return fmt.Sprintf("%d-%d", year, 3)
+		return fmt.Sprintf("%d-0%d", year, 3)
 	case 3:
-		return fmt.Sprintf("%d-%d", year, 4)
+		return fmt.Sprintf("%d-0%d", year, 4)
 	case 4:
-		return fmt.Sprintf("%d-%d", year, 5)
+		return fmt.Sprintf("%d-0%d", year, 5)
 	case 5:
-		return fmt.Sprintf("%d-%d", year, 6)
+		return fmt.Sprintf("%d-0%d", year, 6)
 	case 6:
-		return fmt.Sprintf("%d-%d", year, 7)
+		return fmt.Sprintf("%d-0%d", year, 7)
 	case 7:
-		return fmt.Sprintf("%d-%d", year, 8)
+		return fmt.Sprintf("%d-0%d", year, 8)
 	case 8:
-		return fmt.Sprintf("%d-%d", year, 9)
+		return fmt.Sprintf("%d-0%d", year, 9)
 	case 9:
 		return fmt.Sprintf("%d-%d", year, 10)
 	case 10:
@@ -121,7 +121,7 @@ func (me *timeUtil) nextYearMonth(year,month int) string {
 	case 11:
 		return fmt.Sprintf("%d-%d", year, 12)
 	case 12:
-		return fmt.Sprintf("%d-%d", year, 1)
+		return fmt.Sprintf("%d-0%d", year + 1, 1)
 	default:
 		panic("错误的年月参数")
 	}
