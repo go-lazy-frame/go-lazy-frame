@@ -102,6 +102,9 @@ func (receiver *ChannelMapCache) RemoveByKeyLogic(value interface{}) {
 
 // Clear 清空缓存
 func (receiver *ChannelMapCache) Clear() {
+	if !receiver.init {
+		receiver.cacheInit()
+	}
 	receiver.cacheChClear <- 0
 }
 
