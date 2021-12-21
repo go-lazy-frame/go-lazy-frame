@@ -23,23 +23,23 @@
 package auth_rbac
 
 import (
-	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/framework"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
+	"time"
 )
 
 func init() {
 	go func() {
 		// 等待系统资源初始化完毕
-		framework.WaitingFrameworkInitialized()
+		time.Sleep(time.Second * 5)
 		// 初始化 admin 用户
-		_ ,err := RbacUserService.FindByLoginName("admin")
+		_, err := RbacUserService.FindByLoginName("admin")
 		if err != nil {
 			_, err := RbacUserService.CreateRbacUser(AddRbacUserDto{
-				Admin:      true,
-				LoginName:  "admin",
-				LoginPswd:  "123456",
+				Admin:           true,
+				LoginName:       "admin",
+				LoginPswd:       "123456",
 				RepeatLoginPswd: "123456",
-				SuperAdmin: true,
+				SuperAdmin:      true,
 			})
 			if err != nil {
 				logger.Sugar.Error("用户初始化失败", err)
