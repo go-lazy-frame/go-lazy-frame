@@ -33,18 +33,15 @@ import (
 	"strings"
 )
 
-var (
+// RbacHandler 拦截器
+func RbacHandler() gin.HandlerFunc {
 	// NotAuthUrl 无需鉴权的访问地址前缀
-	NotAuthUrl = []string{
+	NotAuthUrl := []string{
 		configs.GeneralConfig.ApiPrefix + "/login",
 		"/doc",
 		"/swagger",
 		"/swagger-resources",
 	}
-)
-
-// RbacHandler 拦截器
-func RbacHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		num := int64(0)
 		rbacLog := RbacLogCreateDto{
