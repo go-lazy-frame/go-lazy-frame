@@ -36,32 +36,41 @@ import (
 	"time"
 )
 
+type fileEvent struct {
+	FilePath string
+	Op       fsnotify.Op
+}
+
 // FileWatch 文件监听
 type FileWatch struct {
 	// 文件记录缓存
 	filesRecordCache *sync.Map
-	// 新文件 channel
-	chNewFile chan string
+	// 文件处理channel
+	fileHandlerChannel chan *fileEvent
 	// 监听器
-	watcher   *fsnotify.Watcher
+	watcher *fsnotify.Watcher
 	// 判断新文件是否写完的时间更新阈值，默认 500（根据网络环境，自行调整），单位毫秒
 	WriteTime int64
 	// 是否允许 Debug 日志输出，默认 false
 	EnableDebugLog bool
+	// 是否处理文件创建事件， 默认 false
+	EnableFileCreateHandler bool
+	// 是否处理文件删除事件，默认 false
+	EnableFileDelHandler bool
 }
 
 // StartFileWatch 开始目录监听
-func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watchDirs ...string) {
+func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op fsnotify.Op), watchDirs ...string) {
 	if receiver.WriteTime == 0 {
 		receiver.WriteTime = 500
 	}
 	receiver.filesRecordCache = new(sync.Map)
-	receiver.chNewFile = make(chan string, runtime.NumCPU()*2)
+	receiver.fileHandlerChannel = make(chan *fileEvent, runtime.NumCPU()*2)
 	go func() {
 		go func() {
 			for {
-				filePath := <-receiver.chNewFile
-				go fileHandler(filePath)
+				e := <-receiver.fileHandlerChannel
+				go fileHandler(e.FilePath, e.Op)
 			}
 		}()
 		var err error
@@ -85,6 +94,9 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 
 					// 监听创建事件
 					if event.Op&fsnotify.Create == fsnotify.Create || event.Op&fsnotify.Rename == fsnotify.Rename {
+						if !receiver.EnableFileCreateHandler {
+							continue
+						}
 						if !file.IsFile(event.Name) {
 							dir := event.Name
 							err := receiver.watcher.Add(dir)
@@ -105,7 +117,10 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 										sub := util.TimeUtil.GetMilliTime(time.Now()) - t.(int64)
 										if sub >= receiver.WriteTime {
 											receiver.filesRecordCache.Delete(event.Name)
-											receiver.chNewFile <- event.Name
+											receiver.fileHandlerChannel <- &fileEvent{
+												FilePath: event.Name,
+												Op:       fsnotify.Create,
+											}
 											break
 										}
 									}
@@ -116,7 +131,21 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(newFile string), watc
 
 					// 监听写操作
 					if event.Op&fsnotify.Write == fsnotify.Write {
+						if !receiver.EnableFileCreateHandler {
+							continue
+						}
 						receiver.filesRecordCache.Store(event.Name, util.TimeUtil.GetMilliTime(time.Now()))
+					}
+
+					// 监听删除操作
+					if event.Op&fsnotify.Remove == fsnotify.Remove {
+						if !receiver.EnableFileDelHandler {
+							continue
+						}
+						receiver.fileHandlerChannel <- &fileEvent{
+							FilePath: event.Name,
+							Op:       fsnotify.Remove,
+						}
 					}
 				case err, ok := <-receiver.watcher.Errors:
 					logger.Sugar.Error("目录监听错误 ", err, ok)
