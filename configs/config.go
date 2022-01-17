@@ -157,9 +157,7 @@ func ConfigByEnv(obj interface{}) {
 					fmt.Printf("配置 %s 根据环境变量更新失败：不能设置\n", fieldName)
 				}
 				break
-			case "int":
-			case "int32":
-			case "int64":
+			case "int", "int32", "int64":
 				f := fieldValue.Elem().Field(i)
 				if f.CanSet() {
 					fieldValue.Elem().Field(i).SetInt(util.NumberUtil.StringToInt64(valueEnv))
@@ -168,8 +166,7 @@ func ConfigByEnv(obj interface{}) {
 					fmt.Printf("配置 %s 根据环境变量更新失败：不能设置\n", fieldName)
 				}
 				break
-			case "float32":
-			case "float64":
+			case "float32", "float64":
 				f := fieldValue.Elem().Field(i)
 				if f.CanSet() {
 					fieldValue.Elem().Field(i).SetFloat(util.NumberUtil.StringToFloat64(valueEnv))
