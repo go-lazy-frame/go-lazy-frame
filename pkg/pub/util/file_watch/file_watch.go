@@ -43,8 +43,8 @@ type fileEvent struct {
 
 // FileWatch 文件监听
 type FileWatch struct {
-	// 文件记录缓存
-	filesRecordCache *sync.Map
+	// 文件创建缓存
+	newFileCache *sync.Map
 	// 文件处理channel
 	fileHandlerChannel chan *fileEvent
 	// 监听器
@@ -57,6 +57,8 @@ type FileWatch struct {
 	EnableFileCreateHandler bool
 	// 是否处理文件删除事件，默认 false
 	EnableFileDelHandler bool
+	// 是否处理文件的写入事件，默认 false
+	EnableFileWriteHandler bool
 }
 
 // StartFileWatch 开始目录监听
@@ -64,9 +66,34 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op f
 	if receiver.WriteTime == 0 {
 		receiver.WriteTime = 500
 	}
-	receiver.filesRecordCache = new(sync.Map)
+	receiver.newFileCache = new(sync.Map)
 	receiver.fileHandlerChannel = make(chan *fileEvent, runtime.NumCPU()*2)
 	go func() {
+		// 文件创建缓存处理
+		go func() {
+			for {
+				receiver.newFileCache.Range(func(key, value interface{}) bool {
+					filePath := key.(string)
+					fileSize := value.(int64)
+					size := util.FileUtil.FileSize(filePath)
+					if size == fileSize {
+						receiver.newFileCache.Delete(key)
+						receiver.fileHandlerChannel <- &fileEvent{
+							FilePath: filePath,
+							Op:       fsnotify.Create,
+						}
+						if receiver.EnableDebugLog {
+							logger.Sugar.Debugf("新文件：%s 大小：%d\n", filePath, size)
+						}
+					} else {
+						receiver.newFileCache.Store(filePath, size)
+					}
+					return true
+				})
+				time.Sleep(time.Duration(time.Millisecond.Nanoseconds() * receiver.WriteTime))
+			}
+		}()
+		// 文件事件
 		go func() {
 			for {
 				e := <-receiver.fileHandlerChannel
@@ -106,41 +133,31 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op f
 								logger.Sugar.Info("成功监听目录：", dir)
 							}
 						} else {
-							receiver.filesRecordCache.Store(event.Name, util.TimeUtil.GetMilliTime(time.Now()))
-							if receiver.EnableDebugLog {
-								logger.Sugar.Debugf("发现新文件：%s，正在等待其写入完成...\n", event.Name)
-							}
-							go func() {
-								for {
-									if t, ok := receiver.filesRecordCache.Load(event.Name); ok {
-										// 若一段时间后，文件没有任何写操作，则认为该文件已传输完毕
-										sub := util.TimeUtil.GetMilliTime(time.Now()) - t.(int64)
-										if sub >= receiver.WriteTime {
-											receiver.filesRecordCache.Delete(event.Name)
-											receiver.fileHandlerChannel <- &fileEvent{
-												FilePath: event.Name,
-												Op:       fsnotify.Create,
-											}
-											break
-										}
-									}
-								}
-							}()
+							receiver.newFileCache.Store(event.Name, util.FileUtil.FileSize(event.Name))
 						}
 					}
 
 					// 监听写操作
 					if event.Op&fsnotify.Write == fsnotify.Write {
-						if !receiver.EnableFileCreateHandler {
+						if !receiver.EnableFileWriteHandler {
 							continue
 						}
-						receiver.filesRecordCache.Store(event.Name, util.TimeUtil.GetMilliTime(time.Now()))
+						if receiver.EnableDebugLog {
+							logger.Sugar.Debugf("文件写入：%s\n", event.Name)
+						}
+						receiver.fileHandlerChannel <- &fileEvent{
+							FilePath: event.Name,
+							Op:       fsnotify.Write,
+						}
 					}
 
 					// 监听删除操作
 					if event.Op&fsnotify.Remove == fsnotify.Remove {
 						if !receiver.EnableFileDelHandler {
 							continue
+						}
+						if receiver.EnableDebugLog {
+							logger.Sugar.Debugf("删除文件：%s\n", event.Name)
 						}
 						receiver.fileHandlerChannel <- &fileEvent{
 							FilePath: event.Name,

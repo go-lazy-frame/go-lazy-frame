@@ -63,3 +63,12 @@ func (me *fileUtil) Copy(src, dst string) (int64, error) {
 	nBytes, err := io.Copy(destination, source)
 	return nBytes, err
 }
+
+// FileSize 获取文件大小
+func (me *fileUtil) FileSize(filePath string) int64 {
+	info, err := os.Stat(filePath)
+	if err == nil {
+		return info.Size()
+	}
+	return 0
+}
