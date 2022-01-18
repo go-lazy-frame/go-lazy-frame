@@ -42,9 +42,6 @@ const (
 	Write
 	// Remove 删除事件
 	Remove
-
-	Rename
-	Chmod
 )
 
 type fileEvent struct {
