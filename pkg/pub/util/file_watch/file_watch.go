@@ -60,7 +60,7 @@ type FileWatch struct {
 	fileHandlerChannel chan *fileEvent
 	// 监听器
 	watcher *fsnotify.Watcher
-	// 判断新文件是否写完的时间更新阈值，默认 500（根据网络环境，自行调整），单位毫秒
+	// 判断新文件是否写完的时间更新阈值，默认 500（根据网络环境，自行调整。只在 非Linux 环境下生效），单位毫秒
 	WriteTime int64
 	// 是否允许 Debug 日志输出，默认 false
 	EnableDebugLog bool
