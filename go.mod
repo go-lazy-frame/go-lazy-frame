@@ -45,6 +45,8 @@ require (
 	gorm.io/gorm v1.21.15
 )
 
+require github.com/rjeczalik/notify v0.9.2
+
 require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

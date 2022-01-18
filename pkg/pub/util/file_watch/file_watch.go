@@ -25,26 +25,37 @@ package file_watch
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
-	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"github.com/toolkits/file"
 	"io/ioutil"
-	"os"
 	"path"
 	"runtime"
-	"strings"
 	"sync"
-	"time"
+)
+
+// FileOpEvent 文件事件类型
+type FileOpEvent uint32
+
+const (
+	// Created 文件创建完毕（已 write 完成）
+	Created FileOpEvent = 1 << iota
+	// Write 写入事件
+	Write
+	// Remove 删除事件
+	Remove
+
+	Rename
+	Chmod
 )
 
 type fileEvent struct {
 	FilePath string
-	Op       fsnotify.Op
+	Op       FileOpEvent
 }
 
 // FileWatch 文件监听
 type FileWatch struct {
-	// 文件创建缓存
-	newFileCache *sync.Map
+	// 非 Linux 下的文件创建缓存
+	newFileCacheForNonLinux *sync.Map
 	// 文件处理channel
 	fileHandlerChannel chan *fileEvent
 	// 监听器
@@ -53,7 +64,7 @@ type FileWatch struct {
 	WriteTime int64
 	// 是否允许 Debug 日志输出，默认 false
 	EnableDebugLog bool
-	// 是否处理文件创建事件， 默认 false
+	// 是否处理文件创建事件（Linux 下会利用 in_close_write 事件，性能更好）， 默认 false
 	EnableFileCreateHandler bool
 	// 是否处理文件删除事件，默认 false
 	EnableFileDelHandler bool
@@ -62,37 +73,12 @@ type FileWatch struct {
 }
 
 // StartFileWatch 开始目录监听
-func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op fsnotify.Op), watchDirs ...string) {
+func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op FileOpEvent), watchDirs ...string) {
 	if receiver.WriteTime == 0 {
 		receiver.WriteTime = 500
 	}
-	receiver.newFileCache = new(sync.Map)
 	receiver.fileHandlerChannel = make(chan *fileEvent, runtime.NumCPU()*2)
 	go func() {
-		// 文件创建缓存处理
-		go func() {
-			for {
-				receiver.newFileCache.Range(func(key, value interface{}) bool {
-					filePath := key.(string)
-					fileSize := value.(int64)
-					size := util.FileUtil.FileSize(filePath)
-					if size == fileSize {
-						receiver.newFileCache.Delete(key)
-						receiver.fileHandlerChannel <- &fileEvent{
-							FilePath: filePath,
-							Op:       fsnotify.Create,
-						}
-						if receiver.EnableDebugLog {
-							logger.Sugar.Debugf("新文件：%s 大小：%d\n", filePath, size)
-						}
-					} else {
-						receiver.newFileCache.Store(filePath, size)
-					}
-					return true
-				})
-				time.Sleep(time.Duration(time.Millisecond.Nanoseconds() * receiver.WriteTime))
-			}
-		}()
 		// 文件事件
 		go func() {
 			for {
@@ -100,118 +86,12 @@ func (receiver *FileWatch) StartFileWatch(fileHandler func(filePath string, op f
 				go fileHandler(e.FilePath, e.Op)
 			}
 		}()
-		var err error
-		receiver.watcher, err = fsnotify.NewWatcher()
-		if err != nil {
-			logger.Sugar.Error(err)
-		}
-		defer func() {
-			_ = receiver.watcher.Close()
-		}()
-
-		go func() {
-			for {
-				select {
-				case event, ok := <-receiver.watcher.Events:
-					if !ok {
-						logger.Sugar.Error("获取目录监听事件通道失败")
-						time.Sleep(time.Second)
-						continue
-					}
-
-					// 监听创建事件
-					if event.Op&fsnotify.Create == fsnotify.Create || event.Op&fsnotify.Rename == fsnotify.Rename {
-						if !receiver.EnableFileCreateHandler {
-							continue
-						}
-						if !file.IsFile(event.Name) {
-							dir := event.Name
-							err := receiver.watcher.Add(dir)
-							if err != nil {
-								logger.Sugar.Error("新目录：", dir, "，监听失败", err)
-							} else {
-								logger.Sugar.Info("成功监听目录：", dir)
-							}
-						} else {
-							receiver.newFileCache.Store(event.Name, util.FileUtil.FileSize(event.Name))
-						}
-					}
-
-					// 监听写操作
-					if event.Op&fsnotify.Write == fsnotify.Write {
-						if !receiver.EnableFileWriteHandler {
-							continue
-						}
-						if receiver.EnableDebugLog {
-							logger.Sugar.Debugf("文件写入：%s\n", event.Name)
-						}
-						receiver.fileHandlerChannel <- &fileEvent{
-							FilePath: event.Name,
-							Op:       fsnotify.Write,
-						}
-					}
-
-					// 监听删除操作
-					if event.Op&fsnotify.Remove == fsnotify.Remove {
-						if !receiver.EnableFileDelHandler {
-							continue
-						}
-						if receiver.EnableDebugLog {
-							logger.Sugar.Debugf("删除文件：%s\n", event.Name)
-						}
-						receiver.fileHandlerChannel <- &fileEvent{
-							FilePath: event.Name,
-							Op:       fsnotify.Remove,
-						}
-					}
-				case err, ok := <-receiver.watcher.Errors:
-					logger.Sugar.Error("目录监听错误 ", err, ok)
-					if !ok {
-						logger.Sugar.Error("获取目录监听事件通道失败")
-						time.Sleep(time.Second)
-					}
-				}
-			}
-		}()
-
-		var done = make(chan bool)
-
-		var listeningCount int32
-		for _, dir := range watchDirs {
-			dir := strings.TrimSpace(dir)
-			if dir == "" {
-				continue
-			}
-			homeDir, e := os.UserHomeDir()
-			if e != nil {
-				logger.Sugar.Error(e)
-			}
-			if strings.Contains(dir, "~") {
-				dir = strings.Replace(dir, "~", homeDir, 1)
-			}
-			if file.IsExist(dir) {
-				if file.IsFile(dir) {
-					logger.Sugar.Error("路径：", dir, "，是一个文件，无法监听")
-				} else {
-					receiver.listening(dir, &listeningCount)
-				}
-			} else {
-				logger.Sugar.Error("目录：", dir, "，不存在，监听失败")
-			}
-
-		}
-		if listeningCount == 0 {
-			logger.Sugar.Warn("未监听任何目录")
-			done <- true
-		} else {
-			logger.Sugar.Info("共监听目录 ", listeningCount, " 个")
-		}
-
-		<-done
+		receiver.eventHandler(watchDirs)
 	}()
 }
 
-func (receiver *FileWatch) listening(adsPath string, listeningCount *int32) {
+// fsnotify 库的添加监听目录
+func (receiver *FileWatch) fsnotifyListening(adsPath string, listeningCount *int32) {
 	if file.IsExist(adsPath) {
 		if !file.IsFile(adsPath) {
 			//监听path目录
@@ -226,7 +106,7 @@ func (receiver *FileWatch) listening(adsPath string, listeningCount *int32) {
 			dirs, _ := ioutil.ReadDir(adsPath)
 			for _, d := range dirs {
 				if d.IsDir() {
-					receiver.listening(path.Join(adsPath, d.Name()), listeningCount)
+					receiver.fsnotifyListening(path.Join(adsPath, d.Name()), listeningCount)
 				}
 			}
 		}
