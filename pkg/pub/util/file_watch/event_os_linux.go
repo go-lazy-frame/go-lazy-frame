@@ -28,7 +28,6 @@ import (
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/logger"
 	"github.com/go-lazy-frame/go-lazy-frame/pkg/pub/util"
 	"github.com/rjeczalik/notify"
-	"github.com/toolkits/file"
 	"path"
 )
 
@@ -60,16 +59,6 @@ func (receiver *FileWatch) eventHandler(watchDirs []string) {
 
 	for {
 		switch ei := <-c; ei.Event() {
-		case notify.Create:
-			if !file.IsFile(ei.Path()) {
-				dir := ei.Path()
-				dir = path.Join(dir, "...")
-				if err := notify.Watch(dir, c, notify.All, notify.InCloseWrite, notify.InMovedTo); err != nil {
-					logger.Sugar.Error("新目录：", dir, "，监听失败：", err)
-				} else {
-					logger.Sugar.Info("成功监听目录：", dir)
-				}
-			}
 		case notify.InCloseWrite, notify.InMovedTo:
 			if !receiver.EnableFileCreateHandler {
 				continue
